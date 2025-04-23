@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trip Auditor Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0D1117] text-white p-5 font-sans">
+  <h1 class="text-2xl mb-5 font-semibold">Trip Auditor Dashboard</h1>
+
+  <!-- Dashboard Cards -->
+  <div class="flex flex-wrap gap-5 mb-8">
+    <div class="bg-[#161B22] p-5 rounded-xl flex-1 text-center">
+      <h2 class="text-gray-400 text-lg">Total Trips Generated</h2>
+      <p class="text-3xl mt-2">705</p>
+    </div>
+    <div class="bg-[#161B22] p-5 rounded-xl flex-1 text-center">
+      <h2 class="text-gray-400 text-lg">In Transit</h2>
+      <p class="text-3xl mt-2">132 / 110</p>
+    </div>
+    <div class="bg-[#161B22] p-5 rounded-xl flex-1 text-center">
+      <h2 class="text-gray-400 text-lg">Delayed</h2>
+      <p class="text-3xl mt-2">573 / 488</p>
+    </div>
+    <div class="bg-[#161B22] p-5 rounded-xl flex-1 text-center">
+      <h2 class="text-gray-400 text-lg">Flags</h2>
+      <p class="text-3xl mt-2">5</p>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="bg-[#161B22] p-5 rounded-xl mb-8">
+    <div class="mb-4 space-x-2">
+      <button class="bg-blue-600 px-4 py-2 rounded text-white text-sm">Daily</button>
+      <button class="bg-[#0D1117] border border-gray-700 px-4 py-2 rounded text-sm">Weekly</button>
+      <button class="bg-[#0D1117] border border-gray-700 px-4 py-2 rounded text-sm">Monthly</button>
+    </div>
+    <div class="bg-[#1F2937] h-52 flex items-center justify-center rounded text-gray-400 text-sm">
+      Trips Closed vs Audit Pending (Chart Placeholder)
+    </div>
+  </div>
+
+  <!-- Trip Table -->
+  <div class="bg-[#161B22] p-5 rounded-xl">
+    <h2 class="text-xl font-semibold mb-4">Trip List</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-[#0D1117] text-gray-400 text-left">
+            <th class="py-2 px-4">Trip ID</th>
+            <th class="py-2 px-4">Audited</th>
+            <th class="py-2 px-4"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table Rows -->
+          <tr class="even:bg-[#1E293B]">
+            <td class="py-2 px-4">1001</td>
+            <td class="py-2 px-4">Audit</td>
+            <td class="py-2 px-4">
+              <button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button>
+            </td>
+          </tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1002</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1003</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1004</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1005</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1006</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1007</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1008</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+          <tr class="even:bg-[#1E293B]"><td class="py-2 px-4">1010</td><td class="py-2 px-4">Audit</td><td class="py-2 px-4"><button class="bg-blue-600 px-3 py-1 rounded text-white text-sm">Audit</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

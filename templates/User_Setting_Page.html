@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fleet Owner User Settings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+ </head>
+ <body class="bg-[#0B132B] text-white font-sans p-6">
+  <!-- Header -->
+  <h1 class="text-2xl font-bold mb-4">Fleet Owner User Settings</h1>
+  <!-- Navigation -->
+  <div class="flex space-x-6 border-b border-gray-600 pb-2 mb-6 text-sm">
+    <button class="text-gray-300 hover:text-white">Dashboard</button>
+    <button class="text-gray-300 hover:text-white">Trip Generator</button>
+    <button class="text-gray-300 hover:text-white">Trip Closer</button>
+    <button class="text-gray-300 hover:text-white">Trip Auditor</button>
+    <button class="text-white border-b-2 border-white pb-1">AI Module</button>
+  </div>
+  <!-- User Credentials Table and Rights -->
+  <div class="grid grid-cols-3 gap-6 mb-8">
+    <!-- User Table -->
+    <div class="col-span-2">
+      <h2 class="text-lg font-semibold mb-2">User Credentials</h2>
+      <div class="bg-[#1C2541] p-4 rounded-lg overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="text-left text-gray-400 border-b border-gray-600">
+            <tr>
+              <th class="pb-2">Name</th>
+              <th class="pb-2">Email</th>
+              <th class="pb-2">Role</th>
+              <th class="pb-2">✔</th>
+            </tr>
+          </thead>
+          <tbody class="text-white">
+            <tr class="border-b border-gray-700">
+              <td class="py-2">Anna Smith</td>
+              <td>anna.smith@example.com</td>
+              <td>Admin</td>
+              <td><input type="checkbox" checked /></td>
+            </tr>
+            <tr class="border-b border-gray-700">
+              <td class="py-2">John Doe</td>
+              <td>john.doe@example.com</td>
+              <td>Manager</td>
+              <td><input type="checkbox" checked /></td>
+            </tr>
+            <tr class="border-b border-gray-700">
+              <td class="py-2">Emily Johnson</td>
+              <td>emily.johnson@example.com</td>
+              <td>Viewer</td>
+              <td><input type="checkbox" checked /></td>
+            </tr>
+            <tr>
+              <td class="py-2">Michael Brown</td>
+              <td>michael.brown@example.com</td>
+              <td>Trip Closer</td>
+              <td><input type="checkbox" checked /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- User Rights Group -->
+    <div>
+      <h2 class="text-lg font-semibold mb-2">User Rights</h2>
+      <div class="bg-[#1C2541] p-4 rounded-lg space-y-2 text-sm">
+        <div><input type="checkbox" checked class="mr-2">View</div>
+        <div><input type="checkbox" checked class="mr-2">Edit</div>
+        <div><input type="checkbox" checked class="mr-2">Delete</div>
+        <div><input type="checkbox" class="mr-2">Add Fields</div>
+      </div>
+    </div>
+  </div>
+  <!-- Change Password Section -->
+  <div class="grid grid-cols-2 gap-6">
+    <div>
+      <h2 class="text-lg font-semibold mb-2">User Credentials</h2>
+      <div class="bg-[#1C2541] p-4 rounded-lg space-y-3">
+        <input type="email" placeholder="Email" class="w-full bg-[#0E1A36] p-2 rounded text-white 
+placeholder-gray-400 outline-none"/>
+        <input type="password" placeholder="Password" class="w-full bg-[#0E1A36] p-2 rounded 
+text-white placeholder-gray-400 outline-none"/>
+        <button class="bg-gray-600 px-4 py-2 rounded hover:bg-gray-500">Change Password</
+ button>
+      </div>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold mb-2">User Rights</h2>
+      <div class="bg-[#1C2541] p-4 rounded-lg space-y-2 text-sm">
+        <div><input type="checkbox" checked class="mr-2">View</div>
+        <div><input type="checkbox" checked class="mr-2">Edit</div>
+        <div><input type="checkbox" checked class="mr-2">Delete</div>
+        <div><input type="checkbox" checked class="mr-2">Add Fields</div>
+      </div>
+    </div>
+  </div>
+ </body>
+ </html>

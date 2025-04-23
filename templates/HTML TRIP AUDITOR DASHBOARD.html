@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trip Auditor Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0D1117;
+      color: white;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .dashboard-cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: #161B22;
+      padding: 20px;
+      border-radius: 10px;
+      flex: 1;
+      text-align: center;
+    }
+    .card h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #9CA3AF;
+    }
+    .card p {
+      font-size: 28px;
+      margin-top: 10px;
+    }
+    .chart-container {
+      background: #161B22;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+    }
+    .tabs {
+      margin-bottom: 10px;
+    }
+    .tabs button {
+      background: #0D1117;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-right: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .tabs button.active {
+      background: #2563EB;
+    }
+    .chart-placeholder {
+      height: 200px;
+      background: #1F2937;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #6B7280;
+      font-size: 14px;
+    }
+    .trip-table {
+      background: #161B22;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      min-width: 1000px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px;
+    }
+    th {
+      background: #0D1117;
+      color: #9CA3AF;
+    }
+    tr:nth-child(even) {
+      background-color: #1E293B;
+    }
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      display: inline-block;
+    }
+    .btn-edit {
+      background-color: #2563EB;
+    }
+    .btn-delete {
+      background-color: #F97316;
+    }
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-add {
+      background-color: #10B981;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+    .btn-add:hover {
+      background-color: #059669;
+    }
+    .btn-report {
+      background-color: #14B8A6;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trip Auditor Dashboard</h1>
+
+  <form action="/generate-report" method="post">
+    <button type="submit" class="btn btn-report">Generate Report</button>
+  </form>
+
+  <div class="dashboard-cards">
+    <div class="card">
+      <h2>Total Trips</h2>
+      <p>{{ stats.total_trips }}</p>
+    </div>
+    <div class="card">
+      <h2>In Transit</h2>
+      <p>{{ stats.opened }}</p>
+    </div>
+    <div class="card">
+      <h2>Delayed</h2>
+      <p>{{ stats.closed }}</p>
+    </div>
+    <div class="card">
+      <h2>Completed</h2>
+      <p>{{ stats.flags }}</p>
+    </div>
+  </div>
+
+  <div class="trip-table">
+    <h2>Trip List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Trip ID</th>
+          <th>Driver</th>
+          <th>Start Location</th>
+          <th>End Location</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Fuel Usage (litres)</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for trip in trips %}
+        <tr>
+          <td>{{ trip["Trip ID"] }}</td>
+          <td>{{ trip["Driver"] }}</td>
+          <td>{{ trip["Start Location"] }}</td>
+          <td>{{ trip["End Location"] }}</td>
+          <td>{{ trip["Start Date"] }}</td>
+          <td>{{ trip["End Date"] }}</td>
+          <td>{{ trip["Fuel Usage (litres)"] }}</td>
+          <td>{{ trip["Status"] }}</td>
+          <td>
+            <div class="actions">
+              <a href="/edit/{{ trip['Trip ID'] }}"><button class="btn btn-edit">Edit</button></a>
+              <form action="/delete/{{ trip['Trip ID'] }}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-delete">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="9">No trips available.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-container">
+  <div class="tabs">
+    <button class="tab-button active" onclick="updateChart('daily')">Daily</button>
+    <button class="tab-button" onclick="updateChart('weekly')">Weekly</button>
+    <button class="tab-button" onclick="updateChart('monthly')">Monthly</button>
+  </div>
+  <canvas id="tripChart" class="chart-placeholder"></canvas>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  let tripChart;
+
+  // Fetch data from the backend
+  async function fetchTripStats() {
+    const response = await fetch('/trip-stats');
+    return response.json();
+  }
+
+  // Initialize the chart
+  async function initializeChart() {
+    const stats = await fetchTripStats();
+
+    const ctx = document.getElementById('tripChart').getContext('2d');
+    tripChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Completed', 'In Transit', 'Delayed'],
+        datasets: [{
+          label: 'Trips',
+          data: [stats.daily.completed, stats.daily.in_transit, stats.daily.delayed],
+          backgroundColor: ['#10B981', '#2563EB', '#F97316'],
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+  }
+
+  // Update the chart based on the selected period
+  async function updateChart(period) {
+    const stats = await fetchTripStats();
+    const data = stats[period];
+
+    tripChart.data.datasets[0].data = [data.completed, data.in_transit, data.delayed];
+    tripChart.update();
+
+    // Update active button styling
+    document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+    document.querySelector(`.tab-button[onclick="updateChart('${period}')"]`).classList.add('active');
+  }
+
+  // Initialize the chart on page load
+  initializeChart();
+</script>
+
+  <div class="add-trip-button">
+    <button class="btn btn-add" onclick="window.location.href='/add'">Add New Trip</button>
+  </div>
+</body>
+</html>

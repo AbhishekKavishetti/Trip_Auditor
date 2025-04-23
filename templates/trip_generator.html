@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trip Generator Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+ </head>
+ <body class="bg-gray-100 text-white font-sans p-6">
+  <div class="max-w-6xl mx-auto bg-[#0B132B] p-6 rounded-lg shadow-lg">
+    <!-- Header -->
+    <h1 class="text-2xl font-semibold mb-6">Trip Generator Dashboard</h1>
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="bg-[#1C2541] p-4 rounded-lg text-center">
+        <p class="text-3xl font-bold">{{ stats.total_trips }}</p>
+        <p class="text-gray-400">Total Trips</p>
+      </div>
+      <div class="bg-[#1C2541] p-4 rounded-lg text-center">
+        <p class="text-3xl font-bold">{{ stats.flags }}</p>
+        <p class="text-gray-400">Flags</p>
+      </div>
+      <div class="bg-[#1C2541] p-4 rounded-lg text-center">
+        <p class="text-3xl font-bold">{{ stats.notifications }}</p>
+        <p class="text-gray-400">Notifications</p>
+      </div>
+    </div>
+    <!-- Chart Area -->
+    <div class="bg-[#1C2541] p-4 rounded-lg mb-6">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="text-lg font-semibold">Trips Added</h2>
+        <div class="flex gap-2 text-sm">
+          <button class="bg-white text-black px-3 py-1 rounded">Daily</button>
+          <button class="bg-[#0E1A36] px-3 py-1 rounded text-white">Weekly</button>
+          <button class="bg-[#0E1A36] px-3 py-1 rounded text-white">Monthly</button>
+        </div>
+      </div>
+      <div class="h-48 bg-[#0E1A36] rounded flex items-center justify-center text-gray-400 text-sm 
+italic">
+        Chart Placeholder (use Chart.js)
+      </div>
+    </div>
+    <!-- Add New Trip Form -->
+    <div class="bg-[#1C2541] p-6 rounded-lg space-y-4">
+      <h2 class="text-lg font-semibold mb-4">Add New Trip</h2>
+      <div class="grid grid-cols-3 gap-4">
+        <input class="form-input" placeholder="Trip ID" />
+        <input class="form-input" placeholder="Trip Date" />
+        <input class="form-input" placeholder="Vehicle ID" />
+        <input class="form-input" placeholder="Planned Distance (KM)" />
+        <input class="form-input" placeholder="Actual Distance (KM)" />
+        <input class="form-input" placeholder="Actual Delivery Date" />
+        <input class="form-input" placeholder="Trip Delay Reason" />
+        <input class="form-input" placeholder="Advance Given" />
+        <input class="form-input" placeholder="Fuel Quantity (L)" />
+        <input class="form-input" placeholder="Fuel Rate" />
+        <input class="form-input" placeholder="Fuel Cost" />
+        <input class="form-input" placeholder="Toll Charges" />
+        <input class="form-input" placeholder="Food Expense" />
+        <input class="form-input" placeholder="Lodging Expense" />
+        <input class="form-input" placeholder="Miscellaneous Expense" />
+        <input class="form-input" placeholder="Maintenance Cost" />
+        <input class="form-input" placeholder="Loading Charges" />
+        <input class="form-input" placeholder="Unloading Charges" />
+        <input class="form-input" placeholder="Penalty/Fine" />
+        <input class="form-input" placeholder="Total Trip Expense" />
+        <input class="form-input" placeholder="Freight Amount" />
+        <input class="form-input" placeholder="Incentives" />
+      </div>
+    </div>
+    <!-- Back to Dashboard Button -->
+    <div class="mt-6 text-center">
+      <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Back to Trip Auditor Dashboard
+      </a>
+    </div>
+  </div>
+
+ </body>
+ </html>
