@@ -1,21 +1,31 @@
-# from fpdf2 import FPDF
-# import os
-# import uuid
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import os
+import uuid
 
-# def generate_ai_report(insights):
-#     class PDF(FPDF):
-#         def header(self):
-#             self.set_font("Arial", "B", 16)
-#             self.cell(0, 10, "AI Insights Report", ln=True, align="C")
+def generate_ai_report(insights):
+    filename = f"ai_report_{uuid.uuid4().hex[:6]}.pdf"
+    file_path = os.path.join(os.getcwd(), filename)
 
-#         def chapter_body(self, text):
-#             self.set_font("Arial", "", 12)
-#             self.multi_cell(0, 10, text)
+    c = canvas.Canvas(file_path, pagesize=letter)
+    width, height = letter
+    y_position = height - 40
 
-#     pdf = PDF()
-#     pdf.add_page()
-#     pdf.chapter_body("\n".join(insights) if insights else "No insights available.")
-#     filename = f"ai_report_{uuid.uuid4().hex[:6]}.pdf"
-#     file_path = os.path.join(os.getcwd(), filename)
-#     pdf.output(file_path)
-#     return file_path
+    c.setFont("Helvetica-Bold", 16)
+    c.drawCentredString(width / 2.0, y_position, "AI Insights Report")
+
+    c.setFont("Helvetica", 12)
+    y_position -= 40
+
+    if not insights:
+        c.drawString(50, y_position, "No insights available.")
+    else:
+        for line in insights:
+            if y_position < 50:
+                c.showPage()
+                y_position = height - 40
+            c.drawString(50, y_position, f"- {line}")
+            y_position -= 20
+
+    c.save()
+    return file_path

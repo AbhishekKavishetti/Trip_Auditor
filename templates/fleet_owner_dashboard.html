@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fleet Owner Dashboard</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .chart-placeholder {
+      height: 300px; /* Adjust the height */
+      width: 100%; /* Ensure it fits the container */
+    }
+  </style>
+</head>
+
+<body class="bg-[#0B132B] text-white font-sans p-6">
+  <!-- Header -->
+  <h1 class="text-3xl font-bold mb-2">Fleet Owner Dashboard</h1>
+  <!-- Navigation -->
+  <div class="flex space-x-6 border-b border-gray-600 pb-2 mb-6 text-sm">
+    <a href="/fleet-dashboard" 
+       class="flex items-center space-x-2 text-white border-b-2 border-white pb-1 hover:text-blue-400 transition duration-300">
+      <i class="fas fa-tachometer-alt"></i>
+      <span>Dashboard</span>
+    </a>
+    <a href="/trip-auditor" 
+       class="flex items-center space-x-2 text-gray-300 hover:text-blue-400 hover:border-b-2 hover:border-blue-400 transition duration-300">
+      <i class="fas fa-clipboard-list"></i>
+      <span>Trip Auditor</span>
+    </a>
+  </div>
+  
+  <!-- Tab Content -->
+  <div id="dashboard" class="tab-content">
+    <h2 class="text-xl font-bold text-white">Dashboard Content</h2>
+  </div>
+  <div id="trip-auditor" class="tab-content hidden">
+    <h2 class="text-xl font-bold text-white">Trip Auditor Content</h2>
+  </div>
+
+
+  <!-- Main Layout -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <!-- Left Side: Trip Status Box -->
+    <div class="bg-[#1C2541] p-6 rounded">
+      <h2 class="text-xl font-semibold text-white mb-6  ">Trip Status</h2>
+      <div class="grid grid-cols-1 gap-4">
+        <!-- Total Trips Card -->
+        <div class="bg-[#0E1A36] p-4 rounded flex items-center">
+          <div class="bg-blue-600 p-3 rounded-full">
+            <!-- Truck Logo -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a1 1 0 011-1h5a1 1 0 011 1v6h3a1 1 0 011 1v2a1 1 0 01-1 1h-1a3 3 0 11-6 0H9a3 3 0 11-6 0H2a1 1 0 01-1-1v-2a1 1 0 011-1h3z" />
+            </svg>
+          </div>
+          <div class="ml-4 flex-1">
+            <p class="text-lg font-medium text-gray-300">Total Trips</p>
+          </div>
+          <p class="text-3xl font-bold text-white">{{ total_trips }}</p>
+        </div>
+
+        <!-- Ongoing Trips Card -->
+        <div class="bg-[#0E1A36] p-4 rounded flex items-center">
+          <div class="bg-yellow-500 p-3 rounded-full">
+            <!-- Clock Logo -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="ml-4 flex-1">
+            <p class="text-lg font-medium text-gray-300">Ongoing Trips</p>
+          </div>
+          <p class="text-3xl font-bold text-white">{{ ongoing_trips }}</p>
+        </div>
+
+        <!-- Closed Trips Card -->
+        <div class="bg-[#0E1A36] p-4 rounded flex items-center">
+          <div class="bg-green-600 p-3 rounded-full">
+            <!-- Checkmark Logo -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <div class="ml-4 flex-1">
+            <p class="text-lg font-medium text-gray-300">Closed Trips</p>
+          </div>
+          <p class="text-3xl font-bold text-white">{{ closed_trips }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Side: Graph -->
+    <div class="bg-[#1C2541] p-6 rounded">
+      <div class="h-80 bg-[#0E1A36] rounded flex items-center justify-center text-gray-400 text-sm">
+        <canvas id="tripChart" class="chart-placeholder"></canvas>
+      </div>
+      <div class="flex justify-center space-x-4 mt-4">
+        <button class="bg-blue-600 px-4 py-2 rounded text-sm font-semibold hover:bg-blue-700" onclick="updateChart('daily')">Daily</button>
+        <button class="bg-blue-600 px-4 py-2 rounded text-sm font-semibold hover:bg-blue-700" onclick="updateChart('weekly')">Weekly</button>
+        <button class="bg-blue-600 px-4 py-2 rounded text-sm font-semibold hover:bg-blue-700" onclick="updateChart('monthly')">Monthly</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Financial Performance Box -->
+  <div class="bg-[#1C2541] p-6 rounded-xl mb-6">
+    <h2 class="text-xl font-semibold text-white mb-6">Financial Performance</h2>
+  
+    {% set metric_cards = [
+      {
+        'label': 'Net Profit',
+        'value': net_profit,
+        'color': 'bg-green-400',
+        'icon': '''
+          <i class="fas fa-hand-holding-usd text-white text-lg"></i>
+        '''
+      },
+      {
+        'label': 'Total Revenue',
+        'value': total_revenue,
+        'color': 'bg-orange-400',
+        'icon': '''
+          <i class="fas fa-chart-line text-white text-lg"></i>
+        '''
+      },
+      {
+        'label': 'Total Expense',
+        'value': total_expense,
+        'color': 'bg-yellow-300',
+        'icon': '''
+          <i class="fas fa-wallet text-white text-lg"></i>
+        '''
+      },
+      {
+        'label': 'Distance Travelled',
+        'value': total_kms_travelled,
+        'color': 'bg-teal-400',
+        'icon': '''
+          <i class="fas fa-road text-white text-lg"></i>
+        '''
+      }
+    ] %}
+  
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for card in metric_cards %}
+      <div class="group bg-[#0E1A36] p-5 rounded-xl flex flex-col items-center shadow-md hover:shadow-xl hover:scale-105 transform transition duration-300">
+        <div class="{{ card.color }} w-12 h-12 flex items-center justify-center rounded-full mb-3">
+          {{ card.icon | safe }}
+        </div>
+        <p class="text-gray-400 text-sm">{{ card.label }}</p>
+        <p class="text-white text-lg font-semibold">{{ card.value }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- AI Reports Box -->
+  <div class="bg-[#1C2541] p-6 rounded">
+    <h2 class="text-xl font-semibold text-white mb-4">AI Reports</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <ul class="list-disc list-inside text-sm space-y-2 text-gray-300">
+        {% for report in ai_reports %}
+        <li>{{ report }}</li>
+        {% endfor %}
+      </ul>
+      <div class="bg-[#0E1A36] h-40 rounded flex items-center justify-center text-gray-400 text-sm italic">
+        Donut Chart (Profit/Vehicle)
+      </div>
+    </div>
+    <form action="/generate-report" method="post" class="mt-4 flex justify-center">
+      <button type="submit" class="bg-green-600 px-4 py-2 text-sm rounded font-semibold hover:bg-green-700">
+        Generate Report
+      </button>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    let tripChart;
+  
+    async function fetchTripStats() {
+      const response = await fetch('/trip-stats');
+      return response.json();
+    }
+  
+    async function initializeChart() {
+      const stats = await fetchTripStats();
+  
+      const ctx = document.getElementById('tripChart').getContext('2d');
+  
+      // Create gradient colors for the bars
+      const gradientCompleted = ctx.createLinearGradient(0, 0, 0, 400);
+      gradientCompleted.addColorStop(0, '#10B981'); // Green
+      gradientCompleted.addColorStop(1, '#047857'); // Darker Green
+  
+      const gradientInTransit = ctx.createLinearGradient(0, 0, 0, 400);
+      gradientInTransit.addColorStop(0, '#2563EB'); // Blue
+      gradientInTransit.addColorStop(1, '#1E3A8A'); // Darker Blue
+  
+      const gradientDelayed = ctx.createLinearGradient(0, 0, 0, 400);
+      gradientDelayed.addColorStop(0, '#F97316'); // Orange
+      gradientDelayed.addColorStop(1, '#C2410C'); // Darker Orange
+  
+      tripChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Completed', 'In Transit', 'Delayed'], // X-axis labels
+          datasets: [{
+            data: [stats.daily.completed, stats.daily.in_transit, stats.daily.delayed],
+            backgroundColor: [gradientCompleted, gradientInTransit, gradientDelayed], // Gradient colors
+            borderColor: ['#0F9D58', '#1A73E8', '#EA4335'], // Border colors for bars
+            borderWidth: 1, // Border width for bars
+            borderRadius: 10, // Rounded bar edges
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false, // Show legend
+              labels: {
+                color: '#FFFFFF', // Legend text color
+                font: {
+                  size: 14,
+                  weight: 'bold',
+                },
+              },
+            },
+            tooltip: {
+              enabled: true, // Enable tooltips
+              backgroundColor: '#1C2541', // Tooltip background color
+              titleColor: '#FFFFFF', // Tooltip title color
+              bodyColor: '#FFFFFF', // Tooltip body color
+              borderColor: '#FFFFFF', // Tooltip border color
+              borderWidth: 1,
+              callbacks: {
+                label: function (tooltipItem) {
+                  return ` ${tooltipItem.raw} Trips`; // Custom tooltip text
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Trip Status', // X-axis label
+                color: '#FFFFFF',
+                font: {
+                  size: 16,
+                  weight: 'bold',
+                },
+              },
+              grid: {
+                display: false, // Hide vertical gridlines
+              },
+              ticks: {
+                color: '#FFFFFF', // X-axis tick color
+                font: {
+                  size: 12,
+                },
+              },
+            },
+            y: {
+           beginAtZero: true,
+           title: {
+             display: true,
+             text: 'Number of Trips', // Y-axis label
+             color: '#FFFFFF',
+             font: {
+               size: 16,
+               weight: 'bold',
+             },
+           },
+           grid: {
+             color: '#444444', // Gridline color
+             borderDash: [5, 5], // Dashed gridlines
+           },
+           ticks: {
+             color: '#FFFFFF', // Y-axis tick color
+             font: {
+               size: 12,
+             },
+             stepSize: 1, // Ensure ticks increment by 1
+             callback: function(value) {
+               return Math.floor(value) === value ? value : ''; // Show only whole numbers
+             },
+           },
+         },
+        },
+      }
+    });
+    }
+  
+    async function updateChart(period) {
+      const stats = await fetchTripStats();
+      const data = stats[period];
+  
+      tripChart.data.datasets[0].data = [data.completed, data.in_transit, data.delayed];
+      tripChart.update();
+    }
+  
+    initializeChart();
+  </script>
+</body>
+</html>

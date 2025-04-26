@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trip Auditor Dashboard</title>
+  <style>
+    /* General Body Styling */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0D1117;
+      color: white;
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  
+    /* Dashboard Cards */
+    .dashboard-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+  
+    .card {
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+  
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+  
+    .card h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #000000;
+    }
+  
+    .card p {
+      font-size: 36px;
+      margin: 0;
+      font-weight: bold;
+    }
+  
+    /* Gradient Backgrounds for Cards */
+    .card-total-trips {
+      background: linear-gradient(135deg, #3B82F6, #93C5FD); /* Blue Gradient */
+    }
+  
+    .card-in-transit {
+      background: linear-gradient(135deg, #F59E0B, #FDE68A); /* Orange Gradient */
+    }
+  
+    .card-completed {
+      background: linear-gradient(135deg, #10B981, #6EE7B7); /* Green Gradient */
+    }
+  
+    .card-delayed {
+      background: linear-gradient(135deg, #EF4444, #FCA5A5); /* Red Gradient */
+    }
+  
+    /* Table Styling */
+    .trip-table {
+      background: #161B22;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      min-width: 1200px; /* Ensure table has a minimum width */
+      table-layout: auto; /* Allow columns to adjust based on content */
+    }
+  
+    th, td {
+      text-align: center;
+      padding: 10px;
+      white-space: nowrap; /* Prevent text wrapping */
+    }
+  
+    th {
+      background: #0D1117;
+      color: #9CA3AF;
+    }
+  
+    tr:nth-child(even) {
+      background-color: #1E293B; /* Alternate row background color */
+    }
+  
+    /* General Button Styling */
+    .btn {
+      padding: 10px 20px; /* Uniform padding for all buttons */
+      font-size: 16px; /* Uniform font size */
+      border: none;
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer;
+      color: white; /* White text color */
+      display: inline-block;
+      transition: background-color 0.3s ease; /* Smooth hover effect */
+    }
+  
+    /* Edit Trips Button */
+    .btn-edit-trips {
+      background-color: #2563EB; /* Blue color for Edit Trips */
+    }
+  
+    .btn-edit-trips:hover {
+      background-color: #1D4ED8; /* Darker blue on hover */
+    }
+  
+    /* Add New Trip Button */
+    .btn-add {
+      background-color: #10B981; /* Green color for Add New Trip */
+    }
+  
+    .btn-add:hover {
+      background-color: #059669; /* Darker green on hover */
+    }
+  
+    /* Delete Button */
+    .btn-delete {
+      background-color: #EF4444; /* Red color for Delete */
+    }
+  
+    .btn-delete:hover {
+      background-color: #DC2626; /* Darker red on hover */
+    }
+  
+    /* Report Button */
+    .btn-report {
+      background-color: #14B8A6; /* Teal color for Report */
+    }
+  
+    .btn-report:hover {
+      background-color: #0D9488; /* Darker teal on hover */
+    }
+  
+    /* Flexbox for Buttons */
+    .trip-buttons {
+      display: flex;
+      justify-content: flex-end; /* Align buttons to the right */
+      gap: 10px; /* Space between buttons */
+      margin-top: 20px; /* Space above the button container */
+    }
+  
+    /* Chart Placeholder */
+    .chart-placeholder {
+      height: 200px;
+      background: #1F2937;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #6B7280;
+      font-size: 14px;
+    }
+  
+    /* Back Button */
+    .back-button {
+      text-decoration: none;
+      font-size: 24px;
+      color: #2563EB; /* Subtle blue */
+      margin-right: 10px;
+      transition: color 0.3s ease;
+    }
+  
+    .back-button:hover {
+      color: #1D4ED8; /* Darker blue on hover */
+    }
+    /* Highlight the selected row */
+    .selected-row {
+      background-color: #2563EB; /* Blue background for selected row */
+      color: white; /* White text for better contrast */
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="/fleet-dashboard" class="back-button">
+      &lt; <!-- Unicode for left arrow -->
+    </a>
+    Trip Auditor Dashboard
+  </h1>
+
+  <div class="dashboard-cards">
+    <div class="card card-total-trips">
+      <h2>Total Trips</h2>
+      <p>{{ stats.total_trips }}</p>
+    </div>
+    <div class="card card-in-transit">
+      <h2>In Transit</h2>
+      <p>{{ stats.opened }}</p>
+    </div>
+    <div class="card card-completed">
+      <h2>Completed</h2>
+      <p>{{ stats.closed }}</p>
+    </div>
+    <div class="card card-delayed">
+      <h2>Delayed</h2>
+      <p>{{ stats.delayed }}</p>
+    </div>
+  </div>
+
+  <div class="trip-table">
+    <h2>Trip List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Trip ID</th>
+          <th>Driver</th>
+          <th>Vehicle Number</th>
+          <th>Start Location</th>
+          <th>End Location</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Distance (km)</th>
+          <th>Fuel Usage (litres)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for trip in trips %}
+        <tr>
+          <td>{{ trip["Trip ID"] }}</td>
+          <td>{{ trip["Driver"] }}</td>
+          <td>{{ trip["Vehicle Number"] }}</td>
+          <td>{{ trip["Start Location"] }}</td>
+          <td>{{ trip["End Location"] }}</td>
+          <td>{{ trip["Start Date"] }}</td>
+          <td>{{ trip["End Date"] }}</td>
+          <td>{{ trip["Distance (km)"] }}</td>
+          <td>{{ trip["Fuel Usage (litres)"] }}</td>
+          <td>{{ trip["Status"] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="trip-buttons" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+    <button class="btn btn-edit-trips" onclick="toggleEditTrips(this)">Edit Trips</button>
+    <button class="btn btn-add" onclick="toggleAddNewTrip(this)">Add New Trip</button>
+    <button class="btn btn-delete" onclick="deleteSelectedTrip()">Delete Trip</button>  
+  </div>
+
+  <script>
+    let selectedRow = null; // Track the currently selected row
+  
+    // Function to handle row selection
+    function selectRow(row) {
+      // Deselect the previously selected row
+      if (selectedRow) {
+        selectedRow.classList.remove("selected-row");
+      }
+  
+      // Select the clicked row
+      selectedRow = row;
+      selectedRow.classList.add("selected-row");
+    }
+  
+    // Attach the `selectRow` event listener to all rows
+    function attachRowSelection() {
+      const rows = document.querySelectorAll("tbody tr");
+      rows.forEach((row) => {
+        row.addEventListener("click", () => selectRow(row));
+      });
+    }
+  
+    // Call this function after the page loads or the table is updated
+    document.addEventListener("DOMContentLoaded", attachRowSelection);
+    
+    // Function to delete the selected trip
+    function deleteSelectedTrip() {
+      if (!selectedRow) {
+        alert("Please select a trip to delete.");
+        return;
+      }
+  
+      const tripId = selectedRow.querySelector("td:first-child").textContent.trim(); // Get the Trip ID
+  
+      // Confirm deletion
+      if (!confirm(`Are you sure you want to delete Trip ID ${tripId}?`)) {
+        return;
+      }
+  
+      // Send the Trip ID to the backend to delete the trip
+      fetch("/update-trips", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([{ "Trip ID": tripId, "action": "delete" }]),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            // Refresh the table with updated trip data
+            const tableBody = document.querySelector("tbody");
+            tableBody.innerHTML = ""; // Clear the table body
+  
+            data.updated_trips.forEach((trip) => {
+              const newRow = document.createElement("tr");
+              newRow.innerHTML = `
+                <td>${trip["Trip ID"]}</td>
+                <td>${trip["Driver"]}</td>
+                <td>${trip["Vehicle Number"]}</td>
+                <td>${trip["Start Location"]}</td>
+                <td>${trip["End Location"]}</td>
+                <td>${trip["Start Date"]}</td>
+                <td>${trip["End Date"]}</td>
+                <td>${trip["Distance (km)"]}</td>
+                <td>${trip["Fuel Usage (litres)"]}</td>
+                <td>${trip["Status"]}</td>
+              `;
+              newRow.addEventListener("click", () => selectRow(newRow)); // Reattach row selection event
+              tableBody.appendChild(newRow);
+            });
+  
+            selectedRow = null; // Reset the selected row
+            alert("Trip deleted successfully.");
+          } else {
+            alert("Failed to delete the trip. " + (data.error || ""));
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while deleting the trip.");
+        });
+    }
+  </script>
+
+  <script>
+    let isAddingNewTrip = false; // Track whether we are in "Add New Trip" mode
+  
+    function toggleAddNewTrip(button) {
+      const tableBody = document.querySelector("tbody"); // Get the table body
+      if (!isAddingNewTrip) {
+        // Add New Trip Mode
+        isAddingNewTrip = true;
+        button.textContent = "Save"; // Change button text to "Save"
+  
+        // Calculate the next Trip ID
+        const rows = tableBody.querySelectorAll("tr");
+        let nextTripId = 1; // Default to 1 if no rows exist
+        if (rows.length > 0) {
+          const lastRow = rows[rows.length - 1];
+          const lastTripId = parseInt(lastRow.querySelector("td:first-child").textContent.trim());
+          nextTripId = isNaN(lastTripId) ? 1 : lastTripId + 1;
+        }
+  
+        // Create a new row with editable fields
+        const newRow = document.createElement("tr");
+        newRow.innerHTML = `
+          <td>${nextTripId}</td> <!-- Auto-generated Trip ID -->
+          <td><input type="text" placeholder="Driver" class="edit-input" /></td>
+          <td><input type="text" placeholder="Vehicle Number" class="edit-input" /></td>
+          <td><input type="text" placeholder="Start Location" class="edit-input" /></td>
+          <td><input type="text" placeholder="End Location" class="edit-input" /></td>
+          <td><input type="date" class="edit-input" /></td>
+          <td><input type="date" class="edit-input" /></td>
+          <td><input type="number" placeholder="Distance (km)" class="edit-input" /></td>
+          <td><input type="number" placeholder="Fuel Usage (litres)" class="edit-input" /></td>
+          <td>
+            <select class="edit-input">
+              <option value="in transit">In Transit</option>
+              <option value="completed">Completed</option>
+              <option value="delayed">Delayed</option>
+            </select>
+          </td>
+        `;
+        tableBody.appendChild(newRow); // Add the new row to the table
+      } else {
+        // Save Mode
+        const inputs = document.querySelectorAll(".edit-input");
+        const newTripData = {};
+  
+        // Collect data from the inputs
+        inputs.forEach((input, index) => {
+          const columnName = document.querySelectorAll("th")[index + 1].textContent.trim(); // Skip Trip ID column
+          newTripData[columnName] = input.value;
+        });
+  
+        // Add the auto-generated Trip ID
+        const tripIdCell = tableBody.querySelector("tr:last-child td:first-child");
+        newTripData["Trip ID"] = tripIdCell.textContent.trim();
+  
+        // Send the new trip data to the backend
+        fetch("/update-trips", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify([newTripData]), // Send as an array to match backend logic
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Replace input fields with plain text
+              inputs.forEach((input) => {
+                const value = input.value;
+                const parent = input.parentElement;
+                parent.textContent = value;
+              });
+  
+              button.textContent = "Add New Trip"; // Change button text back to "Add New Trip"
+              isAddingNewTrip = false; // Reset the mode
+            } else {
+              alert("Failed to save the new trip.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while saving the new trip.");
+          });
+      }
+    }
+  </script>
+  
+  <script>
+    function toggleEditTrips(button) {
+      const isEditing = button.textContent.trim() === 'Edit Trips';
+      const rows = document.querySelectorAll('tbody tr');
+  
+      if (isEditing) {
+        // Change to Save mode
+        button.textContent = 'Save';
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td:not(:first-child)'); // Exclude the Trip ID column
+          cells.forEach(cell => {
+            const value = cell.textContent.trim();
+            cell.innerHTML = `<input type="text" value="${value}" class="edit-input" />`;
+          });
+        });
+      } else {
+        // Save the changes
+        const updatedData = [];
+        rows.forEach(row => {
+          const tripId = row.querySelector('td:first-child').textContent.trim(); // Get Trip ID
+          const inputs = row.querySelectorAll('.edit-input');
+          const rowData = { "Trip ID": tripId };
+  
+          inputs.forEach((input, index) => {
+            const columnName = document.querySelectorAll('th')[index + 1].textContent.trim(); // Get column name
+            rowData[columnName] = input.value;
+          });
+  
+          updatedData.push(rowData);
+        });
+  
+        // Send updated data to the backend
+        fetch('/update-trips', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedData),
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              // Replace input fields with updated values
+              rows.forEach(row => {
+                const inputs = row.querySelectorAll('.edit-input');
+                inputs.forEach(input => {
+                  input.parentElement.textContent = input.value;
+                });
+              });
+  
+              // Change back to Edit Trips mode
+              button.textContent = 'Edit Trips';
+            } else {
+              alert('Failed to update the trips.');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while updating the trips.');
+          });
+      }
+    }
+  </script>
+
+</body>
+</html>
