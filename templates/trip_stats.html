@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trip Count Statistics</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background-color: #0d1b2a; color: white; padding: 20px; font-family: Arial, sans-serif; }
+    .stats-summary { display: flex; gap: 40px; margin-bottom: 15px; font-size: 18px; font-weight: bold; justify-content: center; }
+    .legend { margin-bottom: 15px; text-align: center; }
+    .legend label { margin-right: 20px; cursor: pointer; font-size: 16px; }
+    input[type="checkbox"] { transform: scale(1.2); margin-right: 6px; vertical-align: middle; }
+  </style>
+</head>
+<body>
+  <h2>Trip Count Statistics</h2>
+  <div class="stats-summary">
+    <div>Total Trips: {{ total_sum }}</div>
+    <div>On-going Trips: {{ ongoing_sum }}</div>
+    <div>Trip Closed: {{ closed_sum }}</div>
+  </div>
+  <div class="legend">
+    <label><input type="checkbox" id="totalCheckbox" checked> Total Trips</label>
+    <label><input type="checkbox" id="ongoingCheckbox" checked> On-going Trips</label>
+    <label><input type="checkbox" id="closedCheckbox" checked> Trip Closed</label>
+  </div>
+  <canvas id="tripChart" height="120"></canvas>
+  <script>
+    const ctx = document.getElementById('tripChart').getContext('2d');
+    const labels = Array.from({ length: 31 }, (_, i) => i + 1);
+    const datasets = [
+      { label: 'Total Trips', backgroundColor: '#f5c518', data: {{ total_data }} },
+      { label: 'On-going Trips', backgroundColor: '#00c896', data: {{ ongoing_data }} },
+      { label: 'Trip Closed', backgroundColor: '#007bff', data: {{ closed_data }} }
+    ];
+    const config = {
+      type: 'bar',
+      data: { labels: labels, datasets: datasets },
+      options: {
+        responsive: true,
+        scales: {
+          x: { ticks: { color: 'white' }, grid: { display: false } },
+          y: { ticks: { color: 'white' }, grid: { color: '#33415c' } }
+        },
+        plugins: { legend: { display: true, labels: { color: 'white' } } }
+      }
+    };
+    const tripChart = new Chart(ctx, config);
+    document.getElementById('totalCheckbox').addEventListener('change', function () {
+      tripChart.data.datasets[0].hidden = !this.checked; tripChart.update();
+    });
+    document.getElementById('ongoingCheckbox').addEventListener('change', function () {
+      tripChart.data.datasets[1].hidden = !this.checked; tripChart.update();
+    });
+    document.getElementById('closedCheckbox').addEventListener('change', function () {
+      tripChart.data.datasets[2].hidden = !this.checked; tripChart.update();
+    });
+  </script>
+</body>
+</html>

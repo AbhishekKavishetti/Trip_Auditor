@@ -1,0 +1,111 @@
+<html>
+<head>
+  <title>Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-[#0B132B] text-white p-6 font-sans">
+  <h1 class="text-3xl font-bold mb-6">Fleet Owner Dashboard</h1>
+      <form method="get" class="flex gap-4 mb-6">
+        <select name="vehicle" class="text-black p-2 rounded">
+          <option value="">All Vehicles</option>
+          {% for v in vehicles %}
+            <option value="{{ v }}" {% if v == selected_vehicle %}selected{% endif %}>{{ v }}</option>
+          {% endfor %}
+        </select>
+        <select name="route" class="text-black p-2 rounded">
+          <option value="">All Routes</option>
+          {% for r in routes %}
+            <option value="{{ r }}" {% if r == selected_route %}selected{% endif %}>{{ r }}</option>
+          {% endfor %}
+        </select>
+        <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">Apply Filters</button>
+      </form>
+
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-[#1C2541] p-4 rounded">
+          <p>Total Trips: <b>{{ total_trips }}</b></p>
+          <p>Ongoing: <b>{{ ongoing }}</b></p>
+          <p>Closed: <b>{{ closed }}</b></p>
+          <p>Flags: <b>{{ flags }}</b></p>
+          <p>Resolved: <b>{{ resolved }}</b></p>
+        </div>
+        <div class="bg-[#1C2541] p-4 rounded">
+          <p class="font-bold mb-2 text-lg">Financial Summary</p>
+          <p>Revenue: ₹{{ rev_m }}M</p>
+          <p>Expense: ₹{{ exp_m }}M</p>
+          <p>Profit: ₹{{ profit_m }}M</p>
+          <p>KMs: {{ kms_k }}K</p>
+          <p>Per KM: ₹{{ per_km }}</p>
+          <p>Profit %: {{ profit_pct }}%</p>
+        </div>
+        <div class="bg-[#1C2541] p-4 rounded">
+          <p class="font-bold mb-2">AI Report</p>
+          <pre class="text-sm text-gray-300">{{ ai_report }}</pre>
+          <a href="/download-summary" class="mt-2 inline-block bg-green-600 px-3 py-1 rounded hover:bg-green-700">Download Summary</a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-[#1C2541] p-4 rounded">
+          <h2 class="mb-2 font-semibold text-lg">Daily Trips vs Audits</h2>
+          <canvas id="auditChart" height="120"></canvas>
+        </div>
+        <div class="bg-[#1C2541] p-4 rounded">
+          <h2 class="mb-2 font-semibold text-lg">Finance Chart</h2>
+          <canvas id="financeChart" height="120"></canvas>
+        </div>
+      </div>
+
+      <div class="mt-6 space-x-4">
+        <a href="/trip-generator" class="bg-blue-600 px-4 py-2 rounded">Trip Generator</a>
+        <a href="/trip-closure" class="bg-green-600 px-4 py-2 rounded">Trip Closure</a>
+        <a href="/trip-auditor" class="bg-yellow-500 px-4 py-2 rounded">Trip Auditor</a>
+        <a href="/trip-ongoing" class="bg-purple-600 px-4 py-2 rounded">Ongoing Trips</a>
+        <a href="/trip-stats" class="bg-pink-600 px-4 py-2 rounded">Trip Stats</a>
+        <a href="/financial-dashboard" class="bg-orange-600 px-4 py-2 rounded">Financial Dashboard</a>
+        <a href="/logout" class="bg-red-600 px-4 py-2 rounded">Logout</a>
+      </div>
+
+      <script>
+        new Chart(document.getElementById('auditChart').getContext('2d'), {
+          data: {
+            labels: Array.from({length: 31}, (_, i) => i + 1),
+            datasets: [
+              {type: 'bar', label: 'Closed', data: {{ daily | safe }}, backgroundColor: '#4CAF50'},
+              {type: 'bar', label: 'Audited', data: {{ audited | safe }}, backgroundColor: '#2196F3'},
+              {type: 'line', label: 'Audit %', data: {{ audit_pct | safe }}, yAxisID: 'y1', borderColor: 'yellow', fill: false}
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {beginAtZero: true, ticks: {color: 'white'}, grid: {color: '#444'}},
+              y1: {beginAtZero: true, position: 'right', ticks: {color: 'white'}, grid: {drawOnChartArea: false}},
+              x: {ticks: {color: 'white'}, grid: {color: '#444'}}
+            },
+            plugins: {legend: {labels: {color: 'white'}}}
+          }
+        });
+
+        new Chart(document.getElementById('financeChart').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: {{ bar_labels | safe }},
+            datasets: [{
+              label: '₹ in Millions',
+              data: {{ bar_values | safe }},
+              backgroundColor: ['#FFA500', '#FF4444', '#44FF44']
+            }]
+          },
+          options: {
+            plugins: {legend: {labels: {color: 'white'}}},
+            scales: {
+              y: {beginAtZero: true, ticks: {color: 'white'}},
+              x: {ticks: {color: 'white'}}
+            }
+          }
+        });
+      </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+
+
+Step 01) Create a folder and clone the repo 
+Step 02) Create a Virtual Environment = python -m venv venv
+Step 03) Activate the Virtual Environment = .\venv\Scripts\activate
+Step 04) Install all the packages from requirements.txt file = pip install -r requirements.txt
+Step 05) Through CMD, run = python app.py

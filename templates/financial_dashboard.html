@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Financial Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background-color: #0d1b2a; font-family: Arial, sans-serif; color: white; padding: 20px; }
+    .stats { display: flex; justify-content: space-around; margin-bottom: 20px; text-align: center; }
+    .stat-block h1 { font-size: 36px; margin: 0; color: #f5c518; }
+    .legend { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
+    .legend label { display: flex; align-items: center; gap: 6px; font-size: 16px; }
+    input[type="checkbox"] { transform: scale(1.2); }
+    canvas { background-color: #0d1b2a; }
+  </style>
+</head>
+<body>
+  <div class="stats">
+    <div class="stat-block">
+      <h1>₹{{ total_revenue }} M</h1>
+      <div>Total Revenue</div>
+    </div>
+    <div class="stat-block">
+      <h1>₹{{ total_profit }} M</h1>
+      <div>Total Profit</div>
+    </div>
+    <div class="stat-block">
+      <h1>{{ total_km }} K</h1>
+      <div>Total KM</div>
+    </div>
+  </div>
+  <div class="legend">
+    <label><input type="checkbox" id="revenueCheckbox" checked> Total Revenue</label>
+    <label><input type="checkbox" id="expenseCheckbox" checked> Total Expense</label>
+    <label><input type="checkbox" id="profitCheckbox" checked> Trip Profit</label>
+  </div>
+  <canvas id="financeChart" height="100"></canvas>
+  <script>
+    const ctx = document.getElementById('financeChart').getContext('2d');
+    const chartDays = {{ days | tojson }};
+    const revenueData = {{ revenue | tojson }};
+    const expenseData = {{ expense | tojson }};
+    const profitData = {{ profit | tojson }};
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: chartDays,
+        datasets: [
+          { label: 'Total Revenue', backgroundColor: '#f5c518', data: revenueData },
+          { label: 'Total Expense', backgroundColor: '#007bff', data: expenseData },
+          { label: 'Trip Profit', backgroundColor: '#00c896', data: profitData }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: 'white' }, grid: { display: false } },
+          y: { ticks: { color: 'white' }, grid: { color: '#33415c' } }
+        }
+      }
+    });
+    document.getElementById('revenueCheckbox').addEventListener('change', function () {
+      chart.data.datasets[0].hidden = !this.checked; chart.update();
+    });
+    document.getElementById('expenseCheckbox').addEventListener('change', function () {
+      chart.data.datasets[1].hidden = !this.checked; chart.update();
+    });
+    document.getElementById('profitCheckbox').addEventListener('change', function () {
+      chart.data.datasets[2].hidden = !this.checked; chart.update();
+    });
+  </script>
+</body>
+</html>

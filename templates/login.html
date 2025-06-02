@@ -1,53 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Trucking Workflow Dashboard</title>
+  <title>Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
-  <div class="max-w-4xl mx-auto mt-10 bg-[#0B132B] text-white rounded-lg shadow-lg p-6">
-    
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-semibold">Trucking Workflow Dashboard</h1>
-      <button class="text-sm text-gray-300 hover:text-white flex items-center gap-1">
-        <span>🌞</span> Light Mode
-      </button>
-    </div>
-    
-    <!-- Login (optional – can be removed if not functional yet) -->
-    <div class="bg-[#1C2541] p-6 rounded-md mb-6">
-      <h2 class="text-lg font-semibold mb-4">Login</h2>
-      <input type="email" placeholder="Email" class="w-full mb-3 p-3 rounded bg-[#0E1A36] placeholder-gray-400 text-white focus:outline-none"/>
-      <input type="password" placeholder="Password" class="w-full mb-3 p-3 rounded bg-[#0E1A36] placeholder-gray-400 text-white focus:outline-none"/>
-      <button class="w-full bg-[#3A506B] hover:bg-blue-600 transition py-2 rounded text-white font-semibold">Continue</button>
-    </div>
-    
-    <!-- Navigation Tabs -->
-    <div class="flex space-x-2 mb-4">
-      <button class="bg-white text-black font-medium px-4 py-2 rounded flex items-center gap-2">🏠 Dashboard</button>
-      <button class="bg-[#1C2541] px-4 py-2 rounded text-white flex items-center gap-2">📄 Trip Generator</button>
-      <button class="bg-[#1C2541] px-4 py-2 rounded text-white flex items-center gap-2">🔁 Closer</button>
-      <button class="bg-[#1C2541] px-4 py-2 rounded text-white flex items-center gap-2">🔍 Audit</button>
-    </div>
-
-    <!-- Status Cards (Dynamic) -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-      <div class="bg-white text-black px-4 py-3 rounded">Pending Trips: {{ pending_trips }}</div>
-      <div class="bg-white text-black px-4 py-3 rounded">Completed: {{ completed_trips }}</div>
-      <div class="bg-white text-black px-4 py-3 rounded">Audit Flags: {{ flags }}</div>
-      <div class="bg-white text-black px-4 py-3 rounded cursor-pointer hover:bg-gray-200 text-center">Generate Report</div>
-    </div>
-
-    <!-- Alerts -->
-    {% for alert in alerts %}
-      <div class="bg-white text-black px-4 py-3 rounded mb-2 flex items-center gap-2">
-        ⚠ {{ alert }}
-      </div>
-    {% endfor %}
-
-  </div>
+<body class="bg-[#0B132B] text-white flex justify-center items-center h-screen">
+  <form method="POST" class="bg-[#0E1A36] p-8 rounded-xl space-y-4 w-96">
+    <h1 class="text-2xl font-bold text-center">Login</h1>
+    {% if error %}
+      <div class="text-red-400 text-center mb-2">{{ error }}</div>
+    {% endif %}
+    <input name="email" type="email" placeholder="Email" class="w-full p-2 rounded bg-[#1C2541]" required>
+    <input name="password" type="password" placeholder="Password" class="w-full p-2 rounded bg-[#1C2541]" required>
+    <button class="w-full bg-blue-500 p-2 rounded" type="submit">Login</button>
+    <p class="text-center pt-2">Don't have an account? <a href="{{ url_for('signup') }}" class="underline">Sign Up</a></p>
+  </form>
 </body>
 </html>

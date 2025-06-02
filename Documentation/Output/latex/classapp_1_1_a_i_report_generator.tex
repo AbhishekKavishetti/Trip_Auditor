@@ -1,0 +1,82 @@
+\doxysection{app.\+AIReport\+Generator Class Reference}
+\hypertarget{classapp_1_1_a_i_report_generator}{}\label{classapp_1_1_a_i_report_generator}\index{app.AIReportGenerator@{app.AIReportGenerator}}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classapp_1_1_a_i_report_generator_a76a31d9ae89e9161980050968cd5276a}{generate}} (filtered\+\_\+df)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00078}{78}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+
+\label{doc-func-members}
+\Hypertarget{classapp_1_1_a_i_report_generator_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classapp_1_1_a_i_report_generator_a76a31d9ae89e9161980050968cd5276a}\index{app.AIReportGenerator@{app.AIReportGenerator}!generate@{generate}}
+\index{generate@{generate}!app.AIReportGenerator@{app.AIReportGenerator}}
+\doxysubsubsection{\texorpdfstring{generate()}{generate()}}
+{\footnotesize\ttfamily \label{classapp_1_1_a_i_report_generator_a76a31d9ae89e9161980050968cd5276a} 
+app.\+AIReport\+Generator.\+generate (\begin{DoxyParamCaption}\item[{}]{filtered\+\_\+df}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\begin{DoxyVerb}Generate a summary AI report from the filtered DataFrame.\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00081}{81}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keyword}{def\ }generate(filtered\_df): }
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Generate\ a\ summary\ AI\ report\ from\ the\ filtered\ DataFrame."{}"{}"{}} }
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ filtered\_df.empty: }
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}No\ data\ available\ for\ AI\ report."{}} }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ most\_profitable\_vehicle\ =\ filtered\_df.groupby(\textcolor{stringliteral}{'Vehicle\ ID'})[\textcolor{stringliteral}{'Net\ Profit'}].sum().idxmax() }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ top\_routes\ =\ \textcolor{stringliteral}{"{},\ "{}}.join(filtered\_df[\textcolor{stringliteral}{'Route'}].value\_counts().head(2).index)\ \textcolor{keywordflow}{if}\ \textcolor{stringliteral}{'Route'}\ \textcolor{keywordflow}{in}\ filtered\_df.columns\ \textcolor{keywordflow}{else}\ \textcolor{stringliteral}{"{}N/A"{}} }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ avg\_profit\_per\_trip\ =\ round(filtered\_df[\textcolor{stringliteral}{'Net\ Profit'}].sum()\ /\ len(filtered\_df),\ 2) }
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ rev\ =\ filtered\_df[\textcolor{stringliteral}{'Freight\ Amount'}].sum() }
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ exp\ =\ filtered\_df[\textcolor{stringliteral}{'Total\ Trip\ Expense'}].sum() }
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ profit\ =\ filtered\_df[\textcolor{stringliteral}{'Net\ Profit'}].sum() }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ kms\ =\ filtered\_df[\textcolor{stringliteral}{'Actual\ Distance\ (KM)'}].sum() }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ profit\_pct\ =\ round((profit\ /\ rev\ *\ 100),\ 1)\ \textcolor{keywordflow}{if}\ rev\ \textcolor{keywordflow}{else}\ 0 }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ per\_km\ =\ round(profit\ /\ kms,\ 2)\ \textcolor{keywordflow}{if}\ kms\ \textcolor{keywordflow}{else}\ 0 }
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ f\textcolor{stringliteral}{"{}"{}"{} }}
+\DoxyCodeLine{00095\ \textcolor{stringliteral}{AI\ Report\ Highlights: }}
+\DoxyCodeLine{00096\ \textcolor{stringliteral}{ }}
+\DoxyCodeLine{00097\ \textcolor{stringliteral}{Total\ Trips:\ \{len(filtered\_df)\} }}
+\DoxyCodeLine{00098\ \textcolor{stringliteral}{On-\/going\ Trips:\ \{filtered\_df[filtered\_df['Trip\ Status']\ ==\ 'Pending\ Closure'].shape[0]\} }}
+\DoxyCodeLine{00099\ \textcolor{stringliteral}{Completed\ Trips:\ \{filtered\_df[filtered\_df['Trip\ Status']\ ==\ 'Completed'].shape[0]\} }}
+\DoxyCodeLine{00100\ \textcolor{stringliteral}{Profit\ Percentage:\ \{profit\_pct\}\% }}
+\DoxyCodeLine{00101\ \textcolor{stringliteral}{ }}
+\DoxyCodeLine{00102\ \textcolor{stringliteral}{Financials: }}
+\DoxyCodeLine{00103\ \textcolor{stringliteral}{-\/\ Revenue:\ Rs\{round(rev\ /\ 1e6,\ 2)\}M }}
+\DoxyCodeLine{00104\ \textcolor{stringliteral}{-\/\ Expense:\ Rs\{round(exp\ /\ 1e6,\ 2)\}M }}
+\DoxyCodeLine{00105\ \textcolor{stringliteral}{-\/\ Profit:\ Rs\{round(profit\ /\ 1e6,\ 2)\}M }}
+\DoxyCodeLine{00106\ \textcolor{stringliteral}{-\/\ KMs\ Travelled:\ \{round(kms\ /\ 1e3,\ 1)\}K }}
+\DoxyCodeLine{00107\ \textcolor{stringliteral}{-\/\ Cost\ per\ KM:\ Rs\{per\_km\} }}
+\DoxyCodeLine{00108\ \textcolor{stringliteral}{ }}
+\DoxyCodeLine{00109\ \textcolor{stringliteral}{AI\ Insights: }}
+\DoxyCodeLine{00110\ \textcolor{stringliteral}{-\/\ Top\ Vehicle:\ \{most\_profitable\_vehicle\} }}
+\DoxyCodeLine{00111\ \textcolor{stringliteral}{-\/\ Average\ Profit\ per\ Trip:\ Rs\{avg\_profit\_per\_trip\} }}
+\DoxyCodeLine{00112\ \textcolor{stringliteral}{-\/\ Top\ Routes:\ \{top\_routes\} }}
+\DoxyCodeLine{00113\ \textcolor{stringliteral}{"{}"{}"{}} }
+\DoxyCodeLine{00114\  }
+\DoxyCodeLine{00115\ \textcolor{stringliteral}{"{}"{}"{} }}
+\DoxyCodeLine{00116\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
+\DoxyCodeLine{00117\ \textcolor{stringliteral}{Main\ Application\ Class }}
+\DoxyCodeLine{00118\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
+\DoxyCodeLine{00119\ \textcolor{stringliteral}{[Summary]\ TripAuditorApp\ is\ the\ main\ Flask\ application\ for\ managing\ trip\ audits. }}
+\DoxyCodeLine{00120\ \textcolor{stringliteral}{[Details]\ It\ initializes\ the\ Flask\ app,\ loads\ datasets,\ manages\ user\ sessions,\ and\ defines\ all\ routes\ for\ the\ application. }}
+\DoxyCodeLine{00121\ \textcolor{stringliteral}{ }}
+\DoxyCodeLine{00122\ \textcolor{stringliteral}{"{}"{}"{}} }
+\DoxyCodeLine{00123\  }
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Work\+Space/\+Repositories/\+Trip\+Auditor/ai\+\_\+agent\+\_\+1/\mbox{\hyperlink{app_8py}{app.\+py}}\end{DoxyCompactItemize}

@@ -1,0 +1,203 @@
+\doxysection{app.\+User\+Manager Class Reference}
+\hypertarget{classapp_1_1_user_manager}{}\label{classapp_1_1_user_manager}\index{app.UserManager@{app.UserManager}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_a0af712b7d8a61855e0e97e25e7e4c793}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self, \mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{user\+\_\+file}})
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_a3a2b11a0f2425add76bbcc1b54c948a3}{load\+\_\+users}} (self)
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_ae5dbef20fa14fdc9977a07c338813ecb}{save\+\_\+users}} (self)
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_af550fd81e95297edca23c2cf7edbfbe1}{add\+\_\+user}} (self, name, email, password, role=\textquotesingle{}Owner\textquotesingle{})
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_ab14567162deac82af1ed4b07822ebf77}{find\+\_\+user}} (self, email)
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_a8daea10c4e7601bec87c6104f80b5b74}{email\+\_\+exists}} (self, email)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{user\+\_\+file}} = user\+\_\+file
+\item 
+\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{users}} = self.\+load\+\_\+users()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00029}{29}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+
+\label{doc-constructors}
+\Hypertarget{classapp_1_1_user_manager_doc-constructors}
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classapp_1_1_user_manager_a0af712b7d8a61855e0e97e25e7e4c793}\index{app.UserManager@{app.UserManager}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_a0af712b7d8a61855e0e97e25e7e4c793} 
+app.\+User\+Manager.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{user\+\_\+file}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00030}{30}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{def\ }\_\_init\_\_(self,\ user\_file): }
+\DoxyCodeLine{00031\ \ \ \ \ \ \ \ \ self.user\_file\ =\ user\_file }
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ self.users\ =\ self.load\_users() }
+\DoxyCodeLine{00033\  }
+
+\end{DoxyCode}
+
+
+\label{doc-func-members}
+\Hypertarget{classapp_1_1_user_manager_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classapp_1_1_user_manager_af550fd81e95297edca23c2cf7edbfbe1}\index{app.UserManager@{app.UserManager}!add\_user@{add\_user}}
+\index{add\_user@{add\_user}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{add\_user()}{add\_user()}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_af550fd81e95297edca23c2cf7edbfbe1} 
+app.\+User\+Manager.\+add\+\_\+user (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{name}{, }\item[{}]{email}{, }\item[{}]{password}{, }\item[{}]{role}{ = {\ttfamily \textquotesingle{}Owner\textquotesingle{}}}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Add a new user and save.\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00049}{49}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{def\ }add\_user(self,\ name,\ email,\ password,\ role='Owner'): }
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Add\ a\ new\ user\ and\ save."{}"{}"{}} }
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ self.users.append(\{ }
+\DoxyCodeLine{00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'name'}:\ name, }
+\DoxyCodeLine{00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'email'}:\ email, }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'password'}:\ generate\_password\_hash(password), }
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'role'}:\ role }
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ \}) }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ self.save\_users() }
+\DoxyCodeLine{00058\  }
+
+\end{DoxyCode}
+\Hypertarget{classapp_1_1_user_manager_a8daea10c4e7601bec87c6104f80b5b74}\index{app.UserManager@{app.UserManager}!email\_exists@{email\_exists}}
+\index{email\_exists@{email\_exists}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{email\_exists()}{email\_exists()}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_a8daea10c4e7601bec87c6104f80b5b74} 
+app.\+User\+Manager.\+email\+\_\+exists (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{email}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Check if an email is already registered.\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00065}{65}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{def\ }email\_exists(self,\ email): }
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Check\ if\ an\ email\ is\ already\ registered."{}"{}"{}} }
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ any(u[\textcolor{stringliteral}{'email'}]\ ==\ email\ \textcolor{keywordflow}{for}\ u\ \textcolor{keywordflow}{in}\ self.users) }
+\DoxyCodeLine{00068\  }
+\DoxyCodeLine{00069\ \textcolor{stringliteral}{"{}"{}"{} }}
+\DoxyCodeLine{00070\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
+\DoxyCodeLine{00071\ \textcolor{stringliteral}{AI\ Report\ Generator\ Class }}
+\DoxyCodeLine{00072\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
+\DoxyCodeLine{00073\ \textcolor{stringliteral}{[Summary]\ AIReportGenerator\ generates\ a\ summary\ AI\ report\ from\ the\ filtered\ DataFrame. }}
+\DoxyCodeLine{00074\ \textcolor{stringliteral}{[Details]\ Defines\ a\ static\ method\ to\ create\ a\ report\ based\ on\ the\ filtered\ DataFrame,\ summarizing\ key\ metrics\ like\ total\ trips,\ profit\ percentage,\ and\ financials. }}
+\DoxyCodeLine{00075\ \textcolor{stringliteral}{ }}
+\DoxyCodeLine{00076\ \textcolor{stringliteral}{"{}"{}"{}} }
+\DoxyCodeLine{00077\  }
+
+\end{DoxyCode}
+\Hypertarget{classapp_1_1_user_manager_ab14567162deac82af1ed4b07822ebf77}\index{app.UserManager@{app.UserManager}!find\_user@{find\_user}}
+\index{find\_user@{find\_user}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{find\_user()}{find\_user()}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_ab14567162deac82af1ed4b07822ebf77} 
+app.\+User\+Manager.\+find\+\_\+user (\begin{DoxyParamCaption}\item[{}]{self}{, }\item[{}]{email}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Find a user by email.\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00060}{60}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{def\ }find\_user(self,\ email): }
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Find\ a\ user\ by\ email."{}"{}"{}} }
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ next((u\ \textcolor{keywordflow}{for}\ u\ \textcolor{keywordflow}{in}\ self.users\ \textcolor{keywordflow}{if}\ u[\textcolor{stringliteral}{'email'}]\ ==\ email),\ \textcolor{keywordtype}{None}) }
+\DoxyCodeLine{00063\  }
+
+\end{DoxyCode}
+\Hypertarget{classapp_1_1_user_manager_a3a2b11a0f2425add76bbcc1b54c948a3}\index{app.UserManager@{app.UserManager}!load\_users@{load\_users}}
+\index{load\_users@{load\_users}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{load\_users()}{load\_users()}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_a3a2b11a0f2425add76bbcc1b54c948a3} 
+app.\+User\+Manager.\+load\+\_\+users (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load users from the JSON file, or return empty list if file doesn't exist.\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00035}{35}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{def\ }load\_users(self): }
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Load\ users\ from\ the\ JSON\ file,\ or\ return\ empty\ list\ if\ file\ doesn't\ exist."{}"{}"{}} }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ os.path.exists(self.user\_file): }
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{with}\ open(self.user\_file,\ \textcolor{stringliteral}{'r'})\ \textcolor{keyword}{as}\ f: }
+\DoxyCodeLine{00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ json.load(f) }
+\DoxyCodeLine{00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ [] }
+\DoxyCodeLine{00041\  }
+
+\end{DoxyCode}
+\Hypertarget{classapp_1_1_user_manager_ae5dbef20fa14fdc9977a07c338813ecb}\index{app.UserManager@{app.UserManager}!save\_users@{save\_users}}
+\index{save\_users@{save\_users}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{save\_users()}{save\_users()}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_ae5dbef20fa14fdc9977a07c338813ecb} 
+app.\+User\+Manager.\+save\+\_\+users (\begin{DoxyParamCaption}\item[{}]{self}{}\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Save the current users list to the JSON file.\end{DoxyVerb}
+ 
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00043}{43}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keyword}{def\ }save\_users(self): }
+\DoxyCodeLine{00044\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Save\ the\ current\ users\ list\ to\ the\ JSON\ file."{}"{}"{}} }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{with}\ open(self.user\_file,\ \textcolor{stringliteral}{'w'})\ \textcolor{keyword}{as}\ f: }
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ json.dump(self.users,\ f) }
+\DoxyCodeLine{00047\  }
+
+\end{DoxyCode}
+
+
+\label{doc-variable-members}
+\Hypertarget{classapp_1_1_user_manager_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}\index{app.UserManager@{app.UserManager}!user\_file@{user\_file}}
+\index{user\_file@{user\_file}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{user\_file}{user\_file}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29} 
+app.\+User\+Manager.\+user\+\_\+file = user\+\_\+file}
+
+
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00031}{31}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+\Hypertarget{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}\index{app.UserManager@{app.UserManager}!users@{users}}
+\index{users@{users}!app.UserManager@{app.UserManager}}
+\doxysubsubsection{\texorpdfstring{users}{users}}
+{\footnotesize\ttfamily \label{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080} 
+app.\+User\+Manager.\+users = self.\+load\+\_\+users()}
+
+
+
+Definition at line \mbox{\hyperlink{app_8py_source_l00032}{32}} of file \mbox{\hyperlink{app_8py_source}{app.\+py}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+D\+:/\+Work\+Space/\+Repositories/\+Trip\+Auditor/ai\+\_\+agent\+\_\+1/\mbox{\hyperlink{app_8py}{app.\+py}}\end{DoxyCompactItemize}

@@ -1,0 +1,5 @@
+# Steps to Generate PDF
+
+1. Go to `../Documentation/Create_Documents`
+2. Double click on `Make_PDF.bat`
+3. `refman.pdf` will be generated in `../Documentation/Output/latex`

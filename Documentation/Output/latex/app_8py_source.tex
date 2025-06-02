@@ -1,0 +1,346 @@
+\doxysection{D\+:/\+Work\+Space/\+Repositories/\+Trip\+Auditor/ai\+\_\+agent\+\_\+1/app.py}
+\hypertarget{app_8py_source}{}\label{app_8py_source}\mbox{\hyperlink{app_8py}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00001}\mbox{\hyperlink{namespaceapp}{00001}}\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00002}00002\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00003}00003\ \textcolor{stringliteral}{Start\ of\ Imports\ and\ Setup}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00004}00004\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00005}00005\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00007}00007\ \textcolor{keyword}{from}\ flask\ \textcolor{keyword}{import}\ Flask,\ render\_template,\ request,\ redirect,\ url\_for,\ session,\ send\_file}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00008}00008\ \textcolor{keyword}{from}\ werkzeug.security\ \textcolor{keyword}{import}\ generate\_password\_hash,\ check\_password\_hash}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00009}00009\ \textcolor{keyword}{import}\ pandas\ \textcolor{keyword}{as}\ pd}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00010}00010\ \textcolor{keyword}{import}\ json}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00011}00011\ \textcolor{keyword}{import}\ os}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00013}00013\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00014}00014\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00015}00015\ \textcolor{stringliteral}{End\ of\ Imports\ and\ Setup}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00016}00016\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00017}00017\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00020}00020\ \textcolor{stringliteral}{"{}"{}"{}\ }}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00021}00021\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00022}00022\ \textcolor{stringliteral}{\ User\ Management\ Class}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00023}00023\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00024}00024\ \textcolor{stringliteral}{[Summary]\ UserManager\ handles\ user\ registration,\ login,\ and\ management}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00025}00025\ \textcolor{stringliteral}{[Details]\ It\ loads\ users\ from\ a\ JSON\ file,\ allows\ adding\ new\ users,\ and\ checks\ for\ existing\ emails.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00026}00026\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00027}00027\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00029}\mbox{\hyperlink{classapp_1_1_user_manager}{00029}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classapp_1_1_user_manager}{UserManager}}:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00030}\mbox{\hyperlink{classapp_1_1_user_manager_a0af712b7d8a61855e0e97e25e7e4c793}{00030}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_user_manager_a0af712b7d8a61855e0e97e25e7e4c793}{\_\_init\_\_}}(self,\ user\_file):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00031}\mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{00031}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{user\_file}}\ =\ user\_file}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00032}\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{00032}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{users}}\ =\ self.\mbox{\hyperlink{classapp_1_1_user_manager_a3a2b11a0f2425add76bbcc1b54c948a3}{load\_users}}()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00034}00034\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ Load\ users\ from\ the\ JSON\ file\ or\ return\ an\ empty\ list\ if\ the\ file\ doesn't\ exist.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00035}\mbox{\hyperlink{classapp_1_1_user_manager_a3a2b11a0f2425add76bbcc1b54c948a3}{00035}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_user_manager_a3a2b11a0f2425add76bbcc1b54c948a3}{load\_users}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00036}00036\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Load\ users\ from\ the\ JSON\ file,\ or\ return\ empty\ list\ if\ file\ doesn't\ exist."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00037}00037\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ os.path.exists(self.\mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{user\_file}}):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00038}00038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{with}\ open(self.\mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{user\_file}},\ \textcolor{stringliteral}{'r'})\ \textcolor{keyword}{as}\ f:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00039}00039\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ json.load(f)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00040}00040\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ []}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00042}00042\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ writes\ the\ users\ list\ to\ the\ specified\ JSON\ file.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00043}\mbox{\hyperlink{classapp_1_1_user_manager_ae5dbef20fa14fdc9977a07c338813ecb}{00043}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_user_manager_ae5dbef20fa14fdc9977a07c338813ecb}{save\_users}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00044}00044\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Save\ the\ current\ users\ list\ to\ the\ JSON\ file."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{keyword}{with}\ open(self.\mbox{\hyperlink{classapp_1_1_user_manager_a93453ef1de740a573cb4d2a54d189a29}{user\_file}},\ \textcolor{stringliteral}{'w'})\ \textcolor{keyword}{as}\ f:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ json.dump(self.\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{users}},\ f)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00048}00048\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ adds\ a\ new\ user\ to\ the\ users\ list\ and\ saves\ it\ to\ the\ JSON\ file.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00049}\mbox{\hyperlink{classapp_1_1_user_manager_af550fd81e95297edca23c2cf7edbfbe1}{00049}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_user_manager_af550fd81e95297edca23c2cf7edbfbe1}{add\_user}}(self,\ name,\ email,\ password,\ role='Owner'):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00050}00050\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Add\ a\ new\ user\ and\ save."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00051}00051\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{users}}.append(\{}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'name'}:\ name,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'email'}:\ email,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'password'}:\ generate\_password\_hash(password),}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00055}00055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{'role'}:\ role}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00056}00056\ \ \ \ \ \ \ \ \ \})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00057}00057\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_user_manager_ae5dbef20fa14fdc9977a07c338813ecb}{save\_users}}()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00059}00059\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ finds\ a\ user\ by\ email\ in\ the\ users\ list,\ It\ returns\ the\ user\ dictionary\ if\ found,\ or\ None\ if\ not\ found.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00060}\mbox{\hyperlink{classapp_1_1_user_manager_ab14567162deac82af1ed4b07822ebf77}{00060}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_user_manager_ab14567162deac82af1ed4b07822ebf77}{find\_user}}(self,\ email):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00061}00061\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Find\ a\ user\ by\ email."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00062}00062\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ next((u\ \textcolor{keywordflow}{for}\ u\ \textcolor{keywordflow}{in}\ self.\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{users}}\ \textcolor{keywordflow}{if}\ u[\textcolor{stringliteral}{'email'}]\ ==\ email),\ \textcolor{keywordtype}{None})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00063}00063\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00064}00064\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ checks\ if\ an\ email\ already\ exists\ in\ the\ users\ list,\ It\ returns\ True\ if\ the\ email\ is\ found,\ or\ False\ otherwise.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00065}\mbox{\hyperlink{classapp_1_1_user_manager_a8daea10c4e7601bec87c6104f80b5b74}{00065}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_user_manager_a8daea10c4e7601bec87c6104f80b5b74}{email\_exists}}(self,\ email):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00066}00066\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Check\ if\ an\ email\ is\ already\ registered."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00067}00067\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ any(u[\textcolor{stringliteral}{'email'}]\ ==\ email\ \textcolor{keywordflow}{for}\ u\ \textcolor{keywordflow}{in}\ self.\mbox{\hyperlink{classapp_1_1_user_manager_a96443b3bbd65d8f495cf86dd3cb1a080}{users}})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00069}00069\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00070}00070\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00071}00071\ \textcolor{stringliteral}{AI\ Report\ Generator\ Class}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00072}00072\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00073}00073\ \textcolor{stringliteral}{[Summary]\ AIReportGenerator\ generates\ a\ summary\ AI\ report\ from\ the\ filtered\ DataFrame.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00074}00074\ \textcolor{stringliteral}{[Details]\ Defines\ a\ static\ method\ to\ create\ a\ report\ based\ on\ the\ filtered\ DataFrame,\ summarizing\ key\ metrics\ like\ total\ trips,\ profit\ percentage,\ and\ financials.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00075}00075\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00076}00076\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00078}\mbox{\hyperlink{classapp_1_1_a_i_report_generator}{00078}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classapp_1_1_a_i_report_generator}{AIReportGenerator}}:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00079}00079\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ generates\ a\ summary\ AI\ report\ from\ the\ filtered\ DataFrame.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00080}00080\ \ \ \ \ \textcolor{preprocessor}{@staticmethod}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00081}\mbox{\hyperlink{classapp_1_1_a_i_report_generator_a76a31d9ae89e9161980050968cd5276a}{00081}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_a_i_report_generator_a76a31d9ae89e9161980050968cd5276a}{generate}}(filtered\_df):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00082}00082\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Generate\ a\ summary\ AI\ report\ from\ the\ filtered\ DataFrame."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00083}00083\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ filtered\_df.empty:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}No\ data\ available\ for\ AI\ report."{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00085}00085\ \ \ \ \ \ \ \ \ most\_profitable\_vehicle\ =\ filtered\_df.groupby(\textcolor{stringliteral}{'Vehicle\ ID'})[\textcolor{stringliteral}{'Net\ Profit'}].sum().idxmax()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00086}00086\ \ \ \ \ \ \ \ \ top\_routes\ =\ \textcolor{stringliteral}{"{},\ "{}}.join(filtered\_df[\textcolor{stringliteral}{'Route'}].value\_counts().head(2).index)\ \textcolor{keywordflow}{if}\ \textcolor{stringliteral}{'Route'}\ \textcolor{keywordflow}{in}\ filtered\_df.columns\ \textcolor{keywordflow}{else}\ \textcolor{stringliteral}{"{}N/A"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00087}00087\ \ \ \ \ \ \ \ \ avg\_profit\_per\_trip\ =\ round(filtered\_df[\textcolor{stringliteral}{'Net\ Profit'}].sum()\ /\ len(filtered\_df),\ 2)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00088}00088\ \ \ \ \ \ \ \ \ rev\ =\ filtered\_df[\textcolor{stringliteral}{'Freight\ Amount'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00089}00089\ \ \ \ \ \ \ \ \ exp\ =\ filtered\_df[\textcolor{stringliteral}{'Total\ Trip\ Expense'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00090}00090\ \ \ \ \ \ \ \ \ profit\ =\ filtered\_df[\textcolor{stringliteral}{'Net\ Profit'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00091}00091\ \ \ \ \ \ \ \ \ kms\ =\ filtered\_df[\textcolor{stringliteral}{'Actual\ Distance\ (KM)'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00092}00092\ \ \ \ \ \ \ \ \ profit\_pct\ =\ round((profit\ /\ rev\ *\ 100),\ 1)\ \textcolor{keywordflow}{if}\ rev\ \textcolor{keywordflow}{else}\ 0}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00093}00093\ \ \ \ \ \ \ \ \ per\_km\ =\ round(profit\ /\ kms,\ 2)\ \textcolor{keywordflow}{if}\ kms\ \textcolor{keywordflow}{else}\ 0}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00094}00094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ f\textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00095}00095\ \textcolor{stringliteral}{AI\ Report\ Highlights:}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00096}00096\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00097}00097\ \textcolor{stringliteral}{Total\ Trips:\ \{len(filtered\_df)\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00098}00098\ \textcolor{stringliteral}{On-\/going\ Trips:\ \{filtered\_df[filtered\_df['Trip\ Status']\ ==\ 'Pending\ Closure'].shape[0]\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00099}00099\ \textcolor{stringliteral}{Completed\ Trips:\ \{filtered\_df[filtered\_df['Trip\ Status']\ ==\ 'Completed'].shape[0]\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00100}00100\ \textcolor{stringliteral}{Profit\ Percentage:\ \{profit\_pct\}\%}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00101}00101\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00102}00102\ \textcolor{stringliteral}{Financials:}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00103}00103\ \textcolor{stringliteral}{-\/\ Revenue:\ Rs\{round(rev\ /\ 1e6,\ 2)\}M}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00104}00104\ \textcolor{stringliteral}{-\/\ Expense:\ Rs\{round(exp\ /\ 1e6,\ 2)\}M}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00105}00105\ \textcolor{stringliteral}{-\/\ Profit:\ Rs\{round(profit\ /\ 1e6,\ 2)\}M}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00106}00106\ \textcolor{stringliteral}{-\/\ KMs\ Travelled:\ \{round(kms\ /\ 1e3,\ 1)\}K}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00107}00107\ \textcolor{stringliteral}{-\/\ Cost\ per\ KM:\ Rs\{per\_km\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00108}00108\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00109}00109\ \textcolor{stringliteral}{AI\ Insights:}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00110}00110\ \textcolor{stringliteral}{-\/\ Top\ Vehicle:\ \{most\_profitable\_vehicle\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00111}00111\ \textcolor{stringliteral}{-\/\ Average\ Profit\ per\ Trip:\ Rs\{avg\_profit\_per\_trip\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00112}00112\ \textcolor{stringliteral}{-\/\ Top\ Routes:\ \{top\_routes\}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00113}00113\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00115}00115\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00116}00116\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00117}00117\ \textcolor{stringliteral}{Main\ Application\ Class}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00118}00118\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00119}00119\ \textcolor{stringliteral}{[Summary]\ TripAuditorApp\ is\ the\ main\ Flask\ application\ for\ managing\ trip\ audits.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00120}00120\ \textcolor{stringliteral}{[Details]\ It\ initializes\ the\ Flask\ app,\ loads\ datasets,\ manages\ user\ sessions,\ and\ defines\ all\ routes\ for\ the\ application.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00121}00121\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00122}00122\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00124}\mbox{\hyperlink{classapp_1_1_trip_auditor_app}{00124}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classapp_1_1_trip_auditor_app}{TripAuditorApp}}:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00125}00125\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ initializes\ the\ Flask\ app,\ loads\ datasets,\ prepares\ vehicle\ and\ route\ lists,\ and\ sets\ up\ user\ management.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00126}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_af1ec56bb68ff3e18849b1580263701a8}{00126}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_trip_auditor_app_af1ec56bb68ff3e18849b1580263701a8}{\_\_init\_\_}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00127}00127\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Initialize\ Flask\ app}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00128}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8a0d96d3faa2cfcd445385e00a197c25}{00128}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8a0d96d3faa2cfcd445385e00a197c25}{app}}\ =\ Flask(\_\_name\_\_)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00129}00129\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8a0d96d3faa2cfcd445385e00a197c25}{app}}.secret\_key\ =\ \textcolor{stringliteral}{'supersecret'}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00131}00131\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Load\ datasets}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00132}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a9ceab6cdfe2a9e41ce5f2e4a973dcc25}{00132}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a9ceab6cdfe2a9e41ce5f2e4a973dcc25}{fleet\_file}}\ =\ \textcolor{stringliteral}{'fleet\_50\_entries.xlsx'}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00133}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a769ee038482a4125297142f2e58aea84}{00133}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a769ee038482a4125297142f2e58aea84}{closure\_file}}\ =\ \textcolor{stringliteral}{'Trip\_Closure\_Sheet\_Oct2024\_Mar2025.xlsx'}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00134}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{00134}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a6ca078c8dbe8ac26d4798c3a0726a061}{load\_fleet\_data}}()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00135}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8736946259fea6d9952aa7963cc1f237}{00135}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8736946259fea6d9952aa7963cc1f237}{closure\_df}}\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a7da43406db41a4266a3264753eb274eb}{load\_closure\_data}}()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00137}00137\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Prepare\ vehicle\ and\ route\ lists}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00138}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_afb9f762354d444a39915f5f768d577ee}{00138}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_afb9f762354d444a39915f5f768d577ee}{vehicles}}\ =\ sorted(self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Vehicle\ ID'}].dropna().unique())}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00139}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a3d60cbf79668e0b4bfb3c51bb70ebe07}{00139}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a3d60cbf79668e0b4bfb3c51bb70ebe07}{routes}}\ =\ sorted(self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Route'}].dropna().unique())\ \textcolor{keywordflow}{if}\ \textcolor{stringliteral}{'Route'}\ \textcolor{keywordflow}{in}\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}.columns\ \textcolor{keywordflow}{else}\ []}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00141}00141\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ User\ management}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00142}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a1c29c41d53cd52f73b1e894723c845ff}{00142}}\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a1c29c41d53cd52f73b1e894723c845ff}{user\_manager}}\ =\ \mbox{\hyperlink{classapp_1_1_user_manager}{UserManager}}(os.path.join(os.getcwd(),\ \textcolor{stringliteral}{'users.json'}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00143}00143\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00144}00144\ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Register\ all\ routes}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00145}00145\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8d771edbd928195e6bfaf0211ff48486}{register\_routes}}()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00147}00147\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ loads\ and\ preprocesses\ the\ fleet\ Excel\ data,\ converting\ date\ columns\ and\ cleaning\ up\ column\ names.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00148}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a6ca078c8dbe8ac26d4798c3a0726a061}{00148}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a6ca078c8dbe8ac26d4798c3a0726a061}{load\_fleet\_data}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00149}00149\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Load\ and\ preprocess\ the\ fleet\ Excel\ data."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00150}00150\ \ \ \ \ \ \ \ \ df\ =\ pd.read\_excel(self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a9ceab6cdfe2a9e41ce5f2e4a973dcc25}{fleet\_file}})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00151}00151\ \ \ \ \ \ \ \ \ df.columns\ =\ df.columns.str.strip()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00152}00152\ \ \ \ \ \ \ \ \ df[\textcolor{stringliteral}{'Trip\ Date'}]\ =\ pd.to\_datetime(df[\textcolor{stringliteral}{'Trip\ Date'}],\ errors=\textcolor{stringliteral}{'coerce'})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00153}00153\ \ \ \ \ \ \ \ \ df[\textcolor{stringliteral}{'Day'}]\ =\ df[\textcolor{stringliteral}{'Trip\ Date'}].dt.day}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00154}00154\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ df}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00156}00156\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ loads\ and\ preprocesses\ the\ closure\ Excel\ data,\ converting\ date\ columns\ and\ cleaning\ up\ column\ names.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00157}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a7da43406db41a4266a3264753eb274eb}{00157}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a7da43406db41a4266a3264753eb274eb}{load\_closure\_data}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00158}00158\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Load\ and\ preprocess\ the\ closure\ Excel\ data."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00159}00159\ \ \ \ \ \ \ \ \ df\ =\ pd.read\_excel(self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a769ee038482a4125297142f2e58aea84}{closure\_file}})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00160}00160\ \ \ \ \ \ \ \ \ df.columns\ =\ df.columns.str.strip()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00161}00161\ \ \ \ \ \ \ \ \ df[\textcolor{stringliteral}{'Trip\ Date'}]\ =\ pd.to\_datetime(df[\textcolor{stringliteral}{'Trip\ Date'}],\ errors=\textcolor{stringliteral}{'coerce'})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00162}00162\ \ \ \ \ \ \ \ \ df[\textcolor{stringliteral}{'Day'}]\ =\ df[\textcolor{stringliteral}{'Trip\ Date'}].dt.day}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00163}00163\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ df}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00165}00165\ \ \ \ \ \textcolor{comment}{\#\ This\ method\ registers\ all\ Flask\ routes\ for\ the\ application,\ defining\ the\ logic\ for\ each\ route.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00166}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8d771edbd928195e6bfaf0211ff48486}{00166}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8d771edbd928195e6bfaf0211ff48486}{register\_routes}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00167}00167\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Define\ all\ Flask\ routes\ for\ the\ app."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00169}00169\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00170}00170\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }home():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00171}00171\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Redirect\ to\ signup\ page}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00172}00172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ redirect(url\_for(\textcolor{stringliteral}{'signup'}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00174}00174\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/signup',\ methods=['GET',\ 'POST'])}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00175}00175\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }signup():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00176}00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Handle\ user\ signup}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00177}00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ request.method\ ==\ \textcolor{stringliteral}{'POST'}:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00178}00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ email\ =\ request.form[\textcolor{stringliteral}{'email'}]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a1c29c41d53cd52f73b1e894723c845ff}{user\_manager}}.email\_exists(email):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00180}00180\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'signup.html'},\ error=\textcolor{stringliteral}{"{}Email\ already\ registered!"{}})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00181}00181\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a1c29c41d53cd52f73b1e894723c845ff}{user\_manager}}.add\_user(}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ name=request.form[\textcolor{stringliteral}{'fullname'}],}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00183}00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ email=email,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00184}00184\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ password=request.form[\textcolor{stringliteral}{'password'}]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00185}00185\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ )}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00186}00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ redirect(url\_for(\textcolor{stringliteral}{'login'}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00187}00187\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'signup.html'})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00188}00188\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00189}00189\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/login',\ methods=['GET',\ 'POST'])}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }login():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00191}00191\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Handle\ user\ login}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00192}00192\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ request.method\ ==\ \textcolor{stringliteral}{'POST'}:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ user\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a1c29c41d53cd52f73b1e894723c845ff}{user\_manager}}.find\_user(request.form[\textcolor{stringliteral}{'email'}])}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00194}00194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ user\ \textcolor{keywordflow}{and}\ check\_password\_hash(user[\textcolor{stringliteral}{'password'}],\ request.form[\textcolor{stringliteral}{'password'}]):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00195}00195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ session[\textcolor{stringliteral}{'user'}]\ =\ user}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00196}00196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ redirect(url\_for(\textcolor{stringliteral}{'dashboard'}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'login.html'},\ error=\textcolor{stringliteral}{"{}Invalid\ credentials."{}})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00198}00198\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'login.html'})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00199}00199\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00200}00200\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/dashboard')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00201}00201\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }dashboard():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00202}00202\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Main\ dashboard\ with\ filters\ and\ summary}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00203}00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{stringliteral}{'user'}\ \textcolor{keywordflow}{not}\ \textcolor{keywordflow}{in}\ session:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00204}00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ redirect(url\_for(\textcolor{stringliteral}{'login'}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00205}00205\ \ \ \ \ \ \ \ \ \ \ \ \ vehicle\ =\ request.args.get(\textcolor{stringliteral}{'vehicle'})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00206}00206\ \ \ \ \ \ \ \ \ \ \ \ \ route\ =\ request.args.get(\textcolor{stringliteral}{'route'})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00207}00207\ \ \ \ \ \ \ \ \ \ \ \ \ filtered\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}.copy()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00208}00208\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ vehicle:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00209}00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filtered\ =\ filtered[filtered[\textcolor{stringliteral}{'Vehicle\ ID'}]\ ==\ vehicle]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ route:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00211}00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ filtered\ =\ filtered[filtered[\textcolor{stringliteral}{'Route'}]\ ==\ route]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00212}00212\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00213}00213\ \ \ \ \ \ \ \ \ \ \ \ \ total\_trips\ =\ len(filtered)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00214}00214\ \ \ \ \ \ \ \ \ \ \ \ \ ongoing\ =\ filtered[filtered[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Pending\ Closure'}].shape[0]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00215}00215\ \ \ \ \ \ \ \ \ \ \ \ \ closed\ =\ filtered[filtered[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Completed'}].shape[0]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00216}00216\ \ \ \ \ \ \ \ \ \ \ \ \ flags\ =\ filtered[filtered[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Under\ Audit'}].shape[0]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00217}00217\ \ \ \ \ \ \ \ \ \ \ \ \ resolved\ =\ filtered[(filtered[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Under\ Audit'})\ \&\ (filtered[\textcolor{stringliteral}{'POD\ Status'}]\ ==\ \textcolor{stringliteral}{'Yes'})].shape[0]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00218}00218\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00219}00219\ \ \ \ \ \ \ \ \ \ \ \ \ rev\ =\ filtered[\textcolor{stringliteral}{'Freight\ Amount'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00220}00220\ \ \ \ \ \ \ \ \ \ \ \ \ exp\ =\ filtered[\textcolor{stringliteral}{'Total\ Trip\ Expense'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00221}00221\ \ \ \ \ \ \ \ \ \ \ \ \ profit\ =\ filtered[\textcolor{stringliteral}{'Net\ Profit'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00222}00222\ \ \ \ \ \ \ \ \ \ \ \ \ kms\ =\ filtered[\textcolor{stringliteral}{'Actual\ Distance\ (KM)'}].sum()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00224}00224\ \ \ \ \ \ \ \ \ \ \ \ \ rev\_m\ =\ round(rev\ /\ 1e6,\ 2)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00225}00225\ \ \ \ \ \ \ \ \ \ \ \ \ exp\_m\ =\ round(exp\ /\ 1e6,\ 2)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00226}00226\ \ \ \ \ \ \ \ \ \ \ \ \ profit\_m\ =\ round(profit\ /\ 1e6,\ 2)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00227}00227\ \ \ \ \ \ \ \ \ \ \ \ \ kms\_k\ =\ round(kms\ /\ 1e3,\ 1)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00228}00228\ \ \ \ \ \ \ \ \ \ \ \ \ per\_km\ =\ round(profit\ /\ kms,\ 2)\ \textcolor{keywordflow}{if}\ kms\ \textcolor{keywordflow}{else}\ 0}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00229}00229\ \ \ \ \ \ \ \ \ \ \ \ \ profit\_pct\ =\ round((profit\ /\ rev)\ *\ 100,\ 1)\ \textcolor{keywordflow}{if}\ rev\ \textcolor{keywordflow}{else}\ 0}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00231}00231\ \ \ \ \ \ \ \ \ \ \ \ \ daily\ =\ filtered.groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Trip\ ID'}].count().reindex(range(1,\ 32),\ fill\_value=0).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00232}00232\ \ \ \ \ \ \ \ \ \ \ \ \ audited\ =\ filtered[filtered[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Under\ Audit'}].groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Trip\ ID'}].count().reindex(range(1,\ 32),\ fill\_value=0).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00233}00233\ \ \ \ \ \ \ \ \ \ \ \ \ audit\_pct\ =\ [round(a\ /\ b\ *\ 100,\ 1)\ \textcolor{keywordflow}{if}\ b\ \textcolor{keywordflow}{else}\ 0\ \textcolor{keywordflow}{for}\ a,\ b\ \textcolor{keywordflow}{in}\ zip(audited,\ daily)]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00235}00235\ \ \ \ \ \ \ \ \ \ \ \ \ bar\_labels\ =\ [\textcolor{stringliteral}{'Revenue'},\ \textcolor{stringliteral}{'Expense'},\ \textcolor{stringliteral}{'Profit'}]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00236}00236\ \ \ \ \ \ \ \ \ \ \ \ \ bar\_values\ =\ [float(rev\_m),\ float(exp\_m),\ float(profit\_m)]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00237}00237\ \ \ \ \ \ \ \ \ \ \ \ \ ai\_report\ =\ AIReportGenerator.generate(filtered)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00238}00238\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00239}00239\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'dashboard.html'},}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00240}00240\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ total\_trips=total\_trips,\ ongoing=ongoing,\ closed=closed,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00241}00241\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flags=flags,\ resolved=resolved,\ rev\_m=rev\_m,\ exp\_m=exp\_m,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00242}00242\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ profit\_m=profit\_m,\ kms\_k=kms\_k,\ per\_km=per\_km,\ profit\_pct=profit\_pct,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00243}00243\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ai\_report=ai\_report,\ vehicles=self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_afb9f762354d444a39915f5f768d577ee}{vehicles}},\ routes=self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a3d60cbf79668e0b4bfb3c51bb70ebe07}{routes}},}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00244}00244\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ selected\_vehicle=vehicle,\ selected\_route=route,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00245}00245\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ daily=daily,\ audited=audited,\ audit\_pct=audit\_pct,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00246}00246\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ bar\_labels=bar\_labels,\ bar\_values=bar\_values)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00247}00247\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00248}00248\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/trip-\/generator')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00249}00249\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }trip\_generator():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00250}00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Show\ all\ trips}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ data\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[[\textcolor{stringliteral}{'Trip\ ID'},\ \textcolor{stringliteral}{'Vehicle\ ID'},\ \textcolor{stringliteral}{'Trip\ Status'}]]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00252}00252\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'table\_page.html'},\ title=\textcolor{stringliteral}{"{}Trip\ Generator"{}},\ table=data.to\_html(classes=\textcolor{stringliteral}{'text-\/white'},\ index=\textcolor{keyword}{False}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00254}00254\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/trip-\/closure')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00255}00255\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }trip\_closure():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00256}00256\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Show\ trips\ pending\ closure}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00257}00257\ \ \ \ \ \ \ \ \ \ \ \ \ data\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Pending\ Closure'}][[\textcolor{stringliteral}{'Trip\ ID'},\ \textcolor{stringliteral}{'Vehicle\ ID'},\ \textcolor{stringliteral}{'Trip\ Status'}]]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00258}00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'table\_page.html'},\ title=\textcolor{stringliteral}{"{}Trip\ Closure"{}},\ table=data.to\_html(classes=\textcolor{stringliteral}{'text-\/white'},\ index=\textcolor{keyword}{False}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00260}00260\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/trip-\/auditor')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00261}00261\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }trip\_auditor():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00262}00262\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Show\ trips\ under\ audit}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00263}00263\ \ \ \ \ \ \ \ \ \ \ \ \ data\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Under\ Audit'}][[\textcolor{stringliteral}{'Trip\ ID'},\ \textcolor{stringliteral}{'Vehicle\ ID'},\ \textcolor{stringliteral}{'POD\ Status'}]]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00264}00264\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'table\_page.html'},\ title=\textcolor{stringliteral}{"{}Trip\ Auditor"{}},\ table=data.to\_html(classes=\textcolor{stringliteral}{'text-\/white'},\ index=\textcolor{keyword}{False}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00266}00266\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/trip-\/ongoing')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00267}00267\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }trip\_ongoing():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00268}00268\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Show\ ongoing\ trips}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00269}00269\ \ \ \ \ \ \ \ \ \ \ \ \ data\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Pending\ Closure'}][[\textcolor{stringliteral}{'Trip\ ID'},\ \textcolor{stringliteral}{'Vehicle\ ID'},\ \textcolor{stringliteral}{'Trip\ Status'}]]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00270}00270\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'table\_page.html'},\ title=\textcolor{stringliteral}{"{}Ongoing\ Trips"{}},\ table=data.to\_html(classes=\textcolor{stringliteral}{'text-\/white'},\ index=\textcolor{keyword}{False}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00272}00272\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/trip-\/stats')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00273}00273\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }trip\_stats():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00274}00274\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Show\ trip\ statistics\ by\ day}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00275}00275\ \ \ \ \ \ \ \ \ \ \ \ \ days\ =\ list(range(1,\ 32))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00276}00276\ \ \ \ \ \ \ \ \ \ \ \ \ total\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}.groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Trip\ ID'}].count().reindex(days,\ fill\_value=0).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ ongoing\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Pending\ Closure'}].groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Trip\ ID'}].count().reindex(days,\ fill\_value=0).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00278}00278\ \ \ \ \ \ \ \ \ \ \ \ \ closed\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}[\textcolor{stringliteral}{'Trip\ Status'}]\ ==\ \textcolor{stringliteral}{'Completed'}].groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Trip\ ID'}].count().reindex(days,\ fill\_value=0).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00279}00279\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00280}00280\ \ \ \ \ \ \ \ \ \ \ \ \ total\_json\ =\ json.dumps(total)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00281}00281\ \ \ \ \ \ \ \ \ \ \ \ \ ongoing\_json\ =\ json.dumps(ongoing)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00282}00282\ \ \ \ \ \ \ \ \ \ \ \ \ closed\_json\ =\ json.dumps(closed)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00283}00283\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00284}00284\ \ \ \ \ \ \ \ \ \ \ \ \ total\_sum\ =\ sum(total)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00285}00285\ \ \ \ \ \ \ \ \ \ \ \ \ ongoing\_sum\ =\ sum(ongoing)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00286}00286\ \ \ \ \ \ \ \ \ \ \ \ \ closed\_sum\ =\ sum(closed)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00287}00287\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00288}00288\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'trip\_stats.html'},}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00289}00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ total\_data=total\_json,\ ongoing\_data=ongoing\_json,\ closed\_data=closed\_json,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00290}00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ total\_sum=total\_sum,\ ongoing\_sum=ongoing\_sum,\ closed\_sum=closed\_sum)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00292}00292\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/financial-\/dashboard')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00293}00293\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }financial\_dashboard():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00294}00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Show\ financial\ dashboard\ with\ recent\ 10\ days\ data}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00295}00295\ \ \ \ \ \ \ \ \ \ \ \ \ df\_fin\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8736946259fea6d9952aa7963cc1f237}{closure\_df}}.copy()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00296}00296\ \ \ \ \ \ \ \ \ \ \ \ \ recent\_days\ =\ sorted(df\_fin[\textcolor{stringliteral}{'Day'}].dropna().unique())[-\/10:]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00297}00297\ \ \ \ \ \ \ \ \ \ \ \ \ day\_labels\ =\ [f\textcolor{stringliteral}{"{}Day\ \{int(d)\}"{}}\ \textcolor{keywordflow}{for}\ d\ \textcolor{keywordflow}{in}\ recent\_days]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00298}00298\ \ \ \ \ \ \ \ \ \ \ \ \ daily\ =\ df\_fin[df\_fin[\textcolor{stringliteral}{'Day'}].isin(recent\_days)]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00299}00299\ \ \ \ \ \ \ \ \ \ \ \ \ revenue\_data\ =\ daily.groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Freight\ Amount'}].sum().reindex(recent\_days,\ fill\_value=0).astype(int).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00300}00300\ \ \ \ \ \ \ \ \ \ \ \ \ expense\_data\ =\ daily.groupby(\textcolor{stringliteral}{'Day'})[\textcolor{stringliteral}{'Total\ Trip\ Expense'}].sum().reindex(recent\_days,\ fill\_value=0).astype(int).tolist()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00301}00301\ \ \ \ \ \ \ \ \ \ \ \ \ profit\_data\ =\ [r\ -\/\ e\ \textcolor{keywordflow}{for}\ r,\ e\ \textcolor{keywordflow}{in}\ zip(revenue\_data,\ expense\_data)]}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00302}00302\ \ \ \ \ \ \ \ \ \ \ \ \ total\_revenue\ =\ round(df\_fin[\textcolor{stringliteral}{'Freight\ Amount'}].sum()\ /\ 1e6,\ 2)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00303}00303\ \ \ \ \ \ \ \ \ \ \ \ \ total\_profit\ =\ round(df\_fin[\textcolor{stringliteral}{'Net\ Profit'}].sum()\ /\ 1e6,\ 2)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ total\_km\ =\ round(df\_fin[\textcolor{stringliteral}{'Actual\ Distance\ (KM)'}].sum()\ /\ 1e3,\ 1)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00305}00305\ \ \ \ \ \ \ \ \ \ \ \ \ per\_km\ =\ round(df\_fin[\textcolor{stringliteral}{'Net\ Profit'}].sum()\ /\ df\_fin[\textcolor{stringliteral}{'Actual\ Distance\ (KM)'}].sum(),\ 2)\ \textcolor{keywordflow}{if}\ df\_fin[\textcolor{stringliteral}{'Actual\ Distance\ (KM)'}].sum()\ \textcolor{keywordflow}{else}\ 0}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00306}00306\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00307}00307\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ render\_template(\textcolor{stringliteral}{'financial\_dashboard.html'},}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00308}00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ days=day\_labels,\ revenue=revenue\_data,\ expense=expense\_data,\ profit=profit\_data,}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00309}00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ total\_revenue=total\_revenue,\ total\_profit=total\_profit,\ total\_km=total\_km,\ per\_km=per\_km)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00310}00310\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00311}00311\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/logout')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00312}00312\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }logout():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00313}00313\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Log\ out\ the\ current\ user}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00314}00314\ \ \ \ \ \ \ \ \ \ \ \ \ session.pop(\textcolor{stringliteral}{'user'},\ \textcolor{keywordtype}{None})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00315}00315\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ redirect(url\_for(\textcolor{stringliteral}{'login'}))}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00317}00317\ \ \ \ \ \ \ \ \ \textcolor{preprocessor}{@self.app.route('/download-\/summary')}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00318}00318\ \ \ \ \ \ \ \ \ \textcolor{keyword}{def\ }download\_summary():}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00319}00319\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{\#\ Download\ AI\ report\ summary\ as\ a\ text\ file}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00320}00320\ \ \ \ \ \ \ \ \ \ \ \ \ filtered\ =\ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_ad756c6d4f1656e39977772e596a4b47d}{df}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00321}00321\ \ \ \ \ \ \ \ \ \ \ \ \ report\ =\ AIReportGenerator.generate(filtered)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00322}00322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{with}\ open(\textcolor{stringliteral}{"{}AI\_Report\_Summary.txt"{}},\ \textcolor{stringliteral}{'w'},\ encoding=\textcolor{stringliteral}{'utf-\/8'})\ \textcolor{keyword}{as}\ f:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00323}00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f.write(report)}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00324}00324\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ send\_file(\textcolor{stringliteral}{"{}AI\_Report\_Summary.txt"{}},\ as\_attachment=\textcolor{keyword}{True})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00325}00325\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00326}\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a7de31b7e4f121ee7db86fbf35e7988c8}{00326}}\ \ \ \ \ \textcolor{keyword}{def\ }\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a7de31b7e4f121ee7db86fbf35e7988c8}{run}}(self):}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00327}00327\ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}"{}"{}Run\ the\ Flask\ app."{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00328}00328\ \ \ \ \ \ \ \ \ self.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a8a0d96d3faa2cfcd445385e00a197c25}{app}}.\mbox{\hyperlink{classapp_1_1_trip_auditor_app_a7de31b7e4f121ee7db86fbf35e7988c8}{run}}(host=\textcolor{stringliteral}{'0.0.0.0'},\ port=7860,\ debug=\textcolor{keyword}{True})}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00329}00329\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00330}00330\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00331}00331\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00332}00332\ \textcolor{stringliteral}{Entry\ Point}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00333}00333\ \textcolor{stringliteral}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00334}00334\ \textcolor{stringliteral}{This\ is\ the\ entry\ point\ for\ the\ application,\ where\ the\ TripAuditorApp\ is\ created\ and\ run.}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00335}00335\ \textcolor{stringliteral}{}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00336}00336\ \textcolor{stringliteral}{"{}"{}"{}}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00337}00337\ }
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00338}00338\ \textcolor{keywordflow}{if}\ \_\_name\_\_\ ==\ \textcolor{stringliteral}{"{}\_\_main\_\_"{}}:}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00339}00339\ \ \ \ \ \textcolor{comment}{\#\ Create\ and\ run\ the\ OOP-\/based\ TripAuditor\ app}}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00340}\mbox{\hyperlink{namespaceapp_a675b4ea702c13dc4b8c05f985a25b496}{00340}}\ \ \ \ \ app\ =\ \mbox{\hyperlink{classapp_1_1_trip_auditor_app}{TripAuditorApp}}()}
+\DoxyCodeLine{\Hypertarget{app_8py_source_l00341}00341\ \ \ \ \ app.run()}
+
+\end{DoxyCode}

@@ -1,0 +1,37 @@
+# Doxyfile 1.14.0
+
+# Project identification
+PROJECT_NAME           = "Trip Auditor Documentation"
+OUTPUT_DIRECTORY       = .
+CREATE_SUBDIRS         = NO
+
+# Configuration of input
+INPUT                  = ../../
+RECURSIVE              = YES
+FILE_PATTERNS          = *.py
+EXCLUDE_PATTERNS       = */venv/*
+
+# Extraction settings
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Source code inclusion
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+
+# Warnings
+WARN_IF_UNDOCUMENTED   = YES
+
+# Disable HTML output
+GENERATE_HTML          = NO
+
+# LaTeX/PDF configuration
+GENERATE_LATEX         = YES
+LATEX_OUTPUT           = latex
+USE_PDFLATEX           = YES
+LATEX_CMD_NAME         = pdflatex
+MAKEINDEX_CMD_NAME     = makeindex
+
+# Dot (graph) settings
+HAVE_DOT               = NO

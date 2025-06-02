@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trip Audit Detail</title>
+  <style>
+    body { background-color: #0D1117; color: white; font-family: Arial; padding: 20px; }
+    .card {
+      background: #161B22; padding: 20px; border-radius: 10px; margin-bottom: 20px;
+    }
+    h1 { font-size: 22px; }
+    table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+    td { padding: 8px; border-bottom: 1px solid #2C2F36; }
+    td.label { color: #9CA3AF; width: 30%; }
+    a.button {
+      display: inline-block; margin-top: 20px; padding: 8px 16px; background: #2563EB;
+      color: white; text-decoration: none; border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trip Detail: {{ trip['Trip Id'] }}</h1>
+  <div class="card">
+    <table>
+      {% for key, value in trip.items() %}
+        <tr>
+          <td class="label">{{ key }}</td>
+          <td>{{ value }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+    <a href="/trip-auditor" class="button">← Back to Dashboard</a>
+  </div>
+</body>
+</html>

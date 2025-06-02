@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trip Closure Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-white font-sans p-6">
+  <div class="max-w-6xl mx-auto bg-[#0B132B] p-6 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-semibold mb-6">Trip Closure Dashboard</h1>
+
+    <div class="grid grid-cols-3 gap-6 mb-6 text-center">
+      <div class="bg-[#1C2541] p-4 rounded-lg">
+        <p class="text-3xl font-bold">{{ total_closures }}</p>
+        <p class="text-gray-400">Total Closures Recorded</p>
+      </div>
+      <div class="bg-[#1C2541] p-4 rounded-lg">
+        <p class="text-3xl font-bold">₹{{ '{:,.2f}'.format(total_expense) }}</p>
+        <p class="text-gray-400">Total Trip Expenses</p>
+      </div>
+      <div class="bg-[#1C2541] p-4 rounded-lg">
+        <p class="text-3xl font-bold">₹{{ '{:,.2f}'.format(total_profit) }}</p>
+        <p class="text-gray-400">Total Net Profit</p>
+      </div>
+    </div>
+
+    <form method="POST" class="bg-[#3A506B] p-6 rounded-lg grid grid-cols-2 gap-4 mb-8">
+      <div>
+        <label class="block text-sm text-gray-200 font-bold mb-2">Trip ID</label>
+        <input name="trip_id" required class="w-full px-3 py-2 rounded bg-gray-200 text-black" type="text" placeholder="Enter Trip ID to close">
+      </div>
+      {% for f, label, ftype in fields %}
+        <div>
+          <label class="block text-sm text-gray-200 capitalize mb-2">{{ label }}</label>
+          <input name="{{ f }}" class="w-full px-3 py-2 rounded bg-gray-200 text-black" type="{{ ftype }}">
+        </div>
+      {% endfor %}
+      <button type="submit" class="mt-6 bg-[#1C2541] hover:bg-[#3A506B] px-4 py-2 rounded text-white col-span-2">Submit Trip Closure</button>
+    </form>
+
+    <h2 class="text-xl font-semibold mb-4">Recent Trip Closures</h2>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-[#1C2541] rounded-lg overflow-hidden">
+        <thead class="bg-[#3A506B] text-white">
+          <tr>
+            <th class="text-left px-4 py-2">Trip ID</th>
+            {% for _, label, _ in fields %}
+            <th class="text-left px-4 py-2">{{ label }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in closures %}
+          <tr class="border-b border-gray-600">
+            <td class="px-4 py-2">{{ row[0] }}</td>
+            {% for i in range(1, fields|length + 1) %}
+            <td class="px-4 py-2">{{ row[i] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+          {% if closures|length == 0 %}
+          <tr>
+            <td colspan="{{ fields|length + 1 }}" class="px-4 py-2 text-center text-gray-400">No trip closures recorded yet.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

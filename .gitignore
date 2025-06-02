@@ -1,8 +1,14 @@
-venv/
+# Python
 __pycache__/
-.vscode/
-*.pyc
-*.pyo
-*.pyd
-*.log
-*.sqlite3
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+env/
+
+# System files
+.DS_Store
+Thumbs.db
