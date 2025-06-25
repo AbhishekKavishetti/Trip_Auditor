@@ -494,10 +494,11 @@ class TripAuditorApp:
                 fields=fields
             )
 
-        @self.app.route('/trip-auditor')
+        @self.app.route('/trip-auditor', methods=['GET', 'POST'])
         def trip_auditor():
             import pandas as pd
-            from flask import request, render_template
+            import json
+            from flask import request, render_template, redirect, url_for
         
             EXCEL_FILE = 'Trip_Closure_Sheet_Oct2024_Mar2025.xlsx'
         
@@ -506,37 +507,70 @@ class TripAuditorApp:
                 df.columns = df.columns.str.strip().str.title()  # Clean column names
                 return df
         
-            df = load_data()
+            def save_data(df):
+                df.to_excel(EXCEL_FILE, index=False)
         
-            trip_id = request.args.get('trip_id')  # If trip_id is passed, show details
+            df = load_data()
+            trip_id = request.args.get('trip_id')
         
             if trip_id:
-                # Audit detail view
+                # Edit and save logic
+                if request.method == 'POST':
+                    for col in df.columns:
+                        if col in request.form:
+                            df.loc[df['Trip Id'].astype(str) == str(trip_id), col] = request.form[col]
+                    save_data(df)
+                    return redirect(url_for('trip_auditor', trip_id=trip_id))
+        
+                # Show editable form
                 if 'Trip Id' not in df.columns:
                     return "<h1 style='color:white'>No Trip Id column found in data.</h1>"
         
                 trip = df[df['Trip Id'].astype(str) == str(trip_id)]
                 if trip.empty:
                     return f"<h1 style='color:white'>Trip ID {trip_id} not found.</h1>"
-        
-                return render_template('trip_audit_detail.html', trip=trip.iloc[0].to_dict())
+                return render_template('trip_auditor.html', trip=trip.iloc[0].to_dict(), editable=True)
         
             # Dashboard summary view
-            status_col = df['Status'] if 'Status' in df.columns else pd.Series(dtype=str)
-            audited_col = df['Audited'] if 'Audited' in df.columns else pd.Series(dtype=str)
-            flag_col = df['Flag'] if 'Flag' in df.columns else pd.Series(dtype=str)
+            status_col = df['Trip Status'] if 'Trip Status' in df.columns else pd.Series(dtype=str)
+            audited_col = df['Pod Status'] if 'Pod Status' in df.columns else pd.Series(dtype=str)
+            flag_col = df['Trip Status'] if 'Trip Status' in df.columns else pd.Series(dtype=str)
             trip_id_col = df['Trip Id'] if 'Trip Id' in df.columns else pd.Series(dtype=str)
         
             total_trips = len(df)
-            opened = len(df[status_col.str.lower() == 'open']) if not status_col.empty else 0
+            opened = len(df[status_col.str.lower() == 'pending closure']) if not status_col.empty else 0
             audited = len(df[audited_col.str.lower() == 'yes']) if not audited_col.empty else 0
-            closed = len(df[status_col.str.lower() == 'closed']) if not status_col.empty else 0
+            closed = len(df[status_col.str.lower() == 'completed']) if not status_col.empty else 0
             audit_closed = len(df[
-                (status_col.str.lower() == 'closed') & (audited_col.str.lower() == 'yes')
+                (status_col.str.lower() == 'completed') & (audited_col.str.lower() == 'yes')
             ]) if not status_col.empty and not audited_col.empty else 0
-            flags = len(df[flag_col.str.lower() == 'yes']) if not flag_col.empty else 0
+            flags = len(df[status_col.str.lower() == 'under audit']) if not status_col.empty else 0
         
-            trip_data = df[['Trip Id']].dropna().to_dict('records') if 'Trip Id' in df.columns else []
+            trip_data = df[['Trip Id', 'Trip Status']].dropna().to_dict('records') if 'Trip Id' in df.columns and 'Trip Status' in df.columns else []
+        
+            # Prepare date columns for grouping
+            df['Trip Date'] = pd.to_datetime(df['Trip Date'], errors='coerce')
+            df['Day'] = df['Trip Date'].dt.day
+            df['Week'] = df['Trip Date'].dt.isocalendar().week
+            df['Month'] = df['Trip Date'].dt.month
+        
+            # Daily
+            days = list(range(1, 32))
+            closed_data_daily = df[status_col.str.lower() == 'completed'].groupby('Day')['Trip Id'].count().reindex(days, fill_value=0).tolist() if not status_col.empty else [0]*31
+            audited_data_daily = df[audited_col.str.lower() == 'yes'].groupby('Day')['Trip Id'].count().reindex(days, fill_value=0).tolist() if not audited_col.empty else [0]*31
+            audit_pct_daily = [round((a / c) * 100, 1) if c else 0 for a, c in zip(audited_data_daily, closed_data_daily)]
+        
+            # Weekly
+            weeks = sorted(df['Week'].dropna().unique().astype(int).tolist())
+            closed_data_weekly = df[status_col.str.lower() == 'completed'].groupby('Week')['Trip Id'].count().reindex(weeks, fill_value=0).tolist() if not status_col.empty else [0]*len(weeks)
+            audited_data_weekly = df[audited_col.str.lower() == 'yes'].groupby('Week')['Trip Id'].count().reindex(weeks, fill_value=0).tolist() if not audited_col.empty else [0]*len(weeks)
+            audit_pct_weekly = [round((a / c) * 100, 1) if c else 0 for a, c in zip(audited_data_weekly, closed_data_weekly)]
+        
+            # Monthly
+            months = sorted(df['Month'].dropna().unique().astype(int).tolist())
+            closed_data_monthly = df[status_col.str.lower() == 'completed'].groupby('Month')['Trip Id'].count().reindex(months, fill_value=0).tolist() if not status_col.empty else [0]*len(months)
+            audited_data_monthly = df[audited_col.str.lower() == 'yes'].groupby('Month')['Trip Id'].count().reindex(months, fill_value=0).tolist() if not audited_col.empty else [0]*len(months)
+            audit_pct_monthly = [round((a / c) * 100, 1) if c else 0 for a, c in zip(audited_data_monthly, closed_data_monthly)]
         
             return render_template(
                 'trip_auditor.html',
@@ -546,9 +580,20 @@ class TripAuditorApp:
                 closed=closed,
                 audit_closed=audit_closed,
                 flags=flags,
-                trips=trip_data
+                trips=trip_data,
+                closed_data_daily=json.dumps(closed_data_daily),
+                audited_data_daily=json.dumps(audited_data_daily),
+                audit_pct_daily=json.dumps(audit_pct_daily),
+                closed_data_weekly=json.dumps(closed_data_weekly),
+                audited_data_weekly=json.dumps(audited_data_weekly),
+                audit_pct_weekly=json.dumps(audit_pct_weekly),
+                closed_data_monthly=json.dumps(closed_data_monthly),
+                audited_data_monthly=json.dumps(audited_data_monthly),
+                audit_pct_monthly=json.dumps(audit_pct_monthly),
+                weeks=json.dumps(weeks),
+                months=json.dumps(months),
+                editable=False  # Set to False for dashboard
             )
-
 
         @self.app.route('/trip-ongoing')
         def trip_ongoing():
